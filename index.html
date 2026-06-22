@@ -884,7 +884,7 @@ function finishExam(timeout){
   document.getElementById('examArea').style.display='none';
   const el = document.getElementById('examResults');
   el.style.display='block';
-  let grade='','cls=''','emoji='🎉';
+  let grade='', cls='', emoji='🎉';
   if(pct>=85){grade='Excellent !';cls='correct';}
   else if(pct>=65){grade='Réussi — Prêt pour l\'examen !';cls='correct';}
   else if(pct>=40){grade='Intermédiaire — Révisez encore';cls='wrong';}
