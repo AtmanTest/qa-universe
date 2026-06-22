@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QA Universe — L'univers du Test & Assurance Qualité</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+<style>
+/* ===== RESET & TOKENS ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --font-display:'Cabinet Grotesk',system-ui,sans-serif;
+  --font-body:'Satoshi',system-ui,sans-serif;
+  --bg:#0e0f11;--surface:#141518;--surface2:#1a1b1f;--surface3:#202226;
+  --accent:#00c2a8;--accent-glow:rgba(0,194,168,.25);
+  --accent2:#f59e0b;
+  --text:#e2e4e9;--text2:#9ca3af;--muted:#6b7280;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.12);
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 4px 24px rgba(0,0,0,.4),0 2px 6px rgba(0,0,0,.2);
+  --glow:0 0 24px var(--accent-glow);
+  --nav-h:64px;
+  --tag-ai:#00c2a8;--tag-istqb:#f59e0b;--tag-outils:#3b82f6;--tag-formation:#22c55e;
+}
+[data-theme="light"]{
+  --bg:#f8f9fa;--surface:#ffffff;--surface2:#f1f3f5;--surface3:#e9ecef;
+  --text:#1a1b1f;--text2:#495057;--muted:#868e96;
+  --border:rgba(0,0,0,.08);--border2:rgba(0,0,0,.12);
+  --shadow:0 4px 24px rgba(0,0,0,.08);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-body);background:var(--bg);color:var(--text);
+  -webkit-font-smoothing:antialiased;line-height:1.6;min-height:100vh;
+  transition:background .3s,color .3s;
+}
+::selection{background:var(--accent);color:#fff}
+
+/* ===== NAVBAR ===== */
+nav{
+  position:sticky;top:0;z-index:100;
+  height:var(--nav-h);background:rgba(14,15,17,.88);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);display:flex;align-items:center;
+  padding:0 24px;gap:8px;
+}
+[data-theme="light"] nav{background:rgba(248,249,250,.92)}
+.nav-logo{font-family:var(--font-display);font-size:26px;font-weight:800;color:var(--accent);display:flex;align-items:center;gap:8px;margin-right:24px;white-space:nowrap}
+.nav-logo svg{width:32px;height:32px}
+.nav-tabs{display:flex;gap:4px;flex:1;overflow-x:auto;scrollbar-width:none}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{
+  padding:8px 14px;border:none;background:transparent;color:var(--muted);
+  font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;
+  border-radius:var(--radius-sm);white-space:nowrap;transition:all .15s;
+  display:flex;align-items:center;gap:6px;
+}
+.nav-tab:hover{color:var(--text);background:var(--surface2)}
+.nav-tab.active{color:var(--accent);background:rgba(0,194,168,.1)}
+.theme-btn{
+  width:40px;height:40px;border:1px solid var(--border);border-radius:var(--radius-sm);
+  background:var(--surface);color:var(--text2);cursor:pointer;
+  display:grid;place-items:center;transition:all .15s;flex-shrink:0;
+}
+.theme-btn:hover{background:var(--surface2);color:var(--text)}
+
+/* ===== MAIN ===== */
+main{padding:0;max-width:1280px;margin:0 auto}
+.tab-content{display:none;padding:40px 24px 80px;animation:fadeIn .35s ease}
+.tab-content.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== SECTION TITLES ===== */
+.section-title{
+  font-family:var(--font-display);font-size:32px;font-weight:800;
+  margin-bottom:8px;letter-spacing:-.02em;
+}
+.section-sub{color:var(--text2);font-size:16px;margin-bottom:32px;max-width:640px}
+.section-sub.centered{margin-left:auto;margin-right:auto;text-align:center}
+
+/* ===== CARDS ===== */
+.card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px;transition:all .18s ease;position:relative;overflow:hidden;
+}
+.card:hover{border-color:var(--border2);box-shadow:var(--shadow)}
+.card.glow:hover{box-shadow:var(--shadow),0 0 20px var(--accent-glow)}
+.card .icon-wrap{
+  width:44px;height:44px;border-radius:var(--radius-sm);
+  display:grid;place-items:center;margin-bottom:12px;
+  background:rgba(0,194,168,.1);color:var(--accent);
+}
+
+/* ===== GRIDS ===== */
+.grid{display:grid;gap:16px}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:1024px){.grid-4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+}
+
+/* ===== BADGES/TAGS ===== */
+.tag{
+  display:inline-flex;align-items:center;padding:2px 10px;
+  border-radius:999px;font-size:11px;font-weight:600;letter-spacing:.04em;
+  text-transform:uppercase;white-space:nowrap;
+}
+.tag-ai{background:rgba(0,194,168,.15);color:var(--tag-ai)}
+.tag-istqb{background:rgba(245,158,11,.15);color:var(--tag-istqb)}
+.tag-outils{background:rgba(59,130,246,.15);color:var(--tag-outils)}
+.tag-formation{background:rgba(34,197,94,.15);color:var(--tag-formation)}
+
+/* ===== HERO ===== */
+.hero{
+  padding:80px 0 60px;text-align:center;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:-60%;left:50%;transform:translateX(-50%);
+  width:600px;height:600px;background:radial-gradient(circle,rgba(0,194,168,.06),transparent 70%);
+  pointer-events:none;
+}
+.hero h1{
+  font-family:var(--font-display);font-size:56px;font-weight:800;
+  letter-spacing:-.03em;line-height:1.1;position:relative;
+}
+.hero h1 span{color:var(--accent)}
+.hero p{color:var(--text2);font-size:18px;max-width:560px;margin:16px auto 0;position:relative}
+.hero-actions{display:flex;gap:12px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 22px;border-radius:var(--radius-sm);border:none;
+  font-family:var(--font-body);font-size:15px;font-weight:500;cursor:pointer;
+  transition:all .15s;text-decoration:none;
+}
+.btn-primary{background:var(--accent);color:#0e0f11;font-weight:600}
+.btn-primary:hover{box-shadow:var(--glow);transform:translateY(-1px)}
+.btn-ghost{background:var(--surface);color:var(--text2);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--surface2);color:var(--text)}
+
+/* ===== STATS ===== */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:40px 0}
+.stat-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:24px;text-align:center;transition:all .18s;
+}
+.stat-card:hover{border-color:var(--border2);box-shadow:var(--shadow)}
+.stat-number{
+  font-family:var(--font-display);font-size:36px;font-weight:800;
+  color:var(--accent);line-height:1;
+}
+.stat-label{color:var(--text2);font-size:14px;margin-top:8px}
+
+/* ===== NEWS CARDS ===== */
+.news-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px;display:flex;flex-direction:column;gap:10px;transition:all .18s;
+}
+.news-card:hover{border-color:var(--border2);box-shadow:var(--shadow)}
+.news-meta{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+.news-title{font-weight:700;font-size:16px;line-height:1.4}
+.news-summary{color:var(--text2);font-size:14px;line-height:1.5}
+
+/* ===== TOOL CARDS ===== */
+.tool-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;display:flex;align-items:flex-start;gap:14px;transition:all .18s;
+}
+.tool-card:hover{border-color:var(--border2);box-shadow:var(--shadow)}
+.tool-icon{
+  width:40px;height:40px;border-radius:var(--radius-sm);
+  background:var(--surface2);display:grid;place-items:center;
+  font-weight:700;font-size:14px;color:var(--accent);flex-shrink:0;
+}
+.tool-info{flex:1}
+.tool-name{font-weight:700;font-size:15px}
+.tool-desc{color:var(--text2);font-size:13px;margin-top:4px;line-height:1.45}
+.tool-star{color:var(--accent2);font-size:12px}
+
+/* ===== QUIZ ===== */
+.quiz-question{font-size:17px;font-weight:600;line-height:1.5;margin-bottom:16px}
+.quiz-options{display:flex;flex-direction:column;gap:10px}
+.quiz-opt{
+  padding:14px 16px;border:1px solid var(--border);border-radius:var(--radius-sm);
+  background:var(--surface2);cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;gap:12px;font-size:15px;line-height:1.45;
+}
+.quiz-opt:hover{border-color:var(--border2);background:var(--surface3)}
+.quiz-opt .letter{
+  width:28px;height:28px;border-radius:50%;border:1px solid var(--border);
+  display:grid;place-items:center;font-size:12px;font-weight:700;
+  color:var(--muted);flex-shrink:0;
+}
+.quiz-opt.selected{border-color:var(--accent);background:rgba(0,194,168,.1)}
+.quiz-opt.selected .letter{border-color:var(--accent);color:var(--accent);background:rgba(0,194,168,.15)}
+.quiz-opt.correct{border-color:var(--accent)!important;background:rgba(0,194,168,.12)!important}
+.quiz-opt.correct .letter{background:rgba(0,194,168,.2);color:var(--accent);border-color:var(--accent)}
+.quiz-opt.wrong{border-color:#ef4444!important;background:rgba(239,68,68,.1)!important}
+.quiz-opt.wrong .letter{background:rgba(239,68,68,.15);color:#ef4444;border-color:#ef4444}
+.quiz-result{
+  margin-top:16px;padding:14px;border-radius:var(--radius-sm);
+  font-size:14px;line-height:1.5;display:none;
+}
+.quiz-result.show{display:block}
+.quiz-result .emoji{font-size:20px}
+.quiz-footer{display:flex;justify-content:space-between;align-items:center;margin-top:20px;flex-wrap:wrap;gap:12px}
+.quiz-score{
+  font-size:14px;color:var(--text2);
+}
+.quiz-score strong{color:var(--accent)}
+
+/* ===== CERT CARDS ===== */
+.cert-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px;display:flex;flex-direction:column;gap:8px;transition:all .18s;
+}
+.cert-card:hover{border-color:var(--border2);box-shadow:var(--shadow)}
+.cert-badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;width:fit-content}
+.cert-badge.new{background:rgba(0,194,168,.15);color:var(--accent)}
+.cert-badge.foundation{background:rgba(245,158,11,.15);color:var(--accent2)}
+.cert-badge.advanced{background:rgba(59,130,246,.15);color:#60a5fa}
+.cert-title{font-weight:700;font-size:16px}
+.cert-desc{color:var(--text2);font-size:14px;line-height:1.5}
+
+/* ===== ROADMAP ===== */
+.roadmap{position:relative;padding-left:28px}
+.roadmap::before{
+  content:'';position:absolute;left:7px;top:8px;bottom:8px;
+  width:2px;background:var(--border);
+}
+.road-step{position:relative;padding:0 0 28px 20px}
+.road-step::before{
+  content:'';position:absolute;left:-21px;top:6px;
+  width:14px;height:14px;border-radius:50%;border:2px solid var(--accent);
+  background:var(--bg);
+}
+.road-step:last-child{padding-bottom:0}
+.road-step.done::before{background:var(--accent)}
+.road-step .step-title{font-weight:700;font-size:15px}
+.road-step .step-desc{color:var(--text2);font-size:14px;margin-top:4px;line-height:1.5}
+
+/* ===== SCROLL REVEAL ===== */
+.reveal{opacity:0;transform:translateY(24px);transition:all .6s cubic-bezier(.22,1,.36,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ===== TOGGLE/DROPDOWN FOR QUIZ ===== */
+.quiz-controls{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;align-items:center}
+.quiz-controls select{
+  padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);
+  background:var(--surface2);color:var(--text);font-family:var(--font-body);font-size:14px;
+  cursor:pointer;outline:none;
+}
+.quiz-controls select:focus{border-color:var(--accent)}
+
+/* ===== CATEGORY HEADERS ===== */
+.cat-header{
+  display:flex;align-items:center;gap:12px;margin:28px 0 16px;font-size:20px;font-weight:700;
+  font-family:var(--font-display);
+}
+.cat-header .accent-line{flex:1;height:1px;background:var(--border)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  nav{padding:0 12px;gap:4px}
+  .nav-logo{font-size:20px;margin-right:12px}
+  .nav-logo svg{width:26px;height:26px}
+  .nav-tab{padding:6px 10px;font-size:13px}
+  .hero h1{font-size:36px}
+  .hero p{font-size:16px}
+  .section-title{font-size:26px}
+  main{padding:0}
+  .tab-content{padding:24px 16px 60px}
+}
+
+/* ===== CATEGORY GRID FOR TOOLS ===== */
+.tool-cat-title{font-weight:700;font-size:15px;color:var(--text2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em}
+
+/* ===== FOOTER ===== */
+footer{
+  border-top:1px solid var(--border);padding:32px 24px;
+  text-align:center;color:var(--muted);font-size:14px;
+}
+footer a{color:var(--accent);text-decoration:none}
+footer a:hover{text-decoration:underline}
+footer .footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+footer .footer-links a{color:var(--text2);font-size:13px}
+footer .footer-links a:hover{color:var(--text)}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <div class="nav-logo">
+    <svg viewBox="0 0 32 32" fill="none"><path d="M4 16C4 9.373 9.373 4 16 4s12 5.373 12 12-5.373 12-12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 22a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" fill="currentColor" opacity=".3"/><path d="M22 16h6M4 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    QA∞
+  </div>
+  <div class="nav-tabs" id="navTabs">
+    <button class="nav-tab active" data-tab="home">🏠 Accueil</button>
+    <button class="nav-tab" data-tab="news">📰 Actualités</button>
+    <button class="nav-tab" data-tab="ai">🤖 IA & Testing</button>
+    <button class="nav-tab" data-tab="tools">🛠️ Outils</button>
+    <button class="nav-tab" data-tab="training">📚 Formations</button>
+    <button class="nav-tab" data-tab="istqb">🎓 ISTQB Prep</button>
+  </div>
+  <button class="theme-btn" id="themeToggle" title="Basculer thème">🌙</button>
+</nav>
+
+<main id="mainContent">
+
+<!-- ==================== TAB: ACCUEIL ==================== -->
+<section class="tab-content active" id="tab-home">
+  <div class="hero">
+    <h1>Bienvenue dans <span>QA Universe</span></h1>
+    <p>La plateforme de référence pour les professionnels du Test et de l'Assurance Qualité. Actualités, outils, IA, formations et préparation aux certifications.</p>
+    <div class="hero-actions reveal">
+      <button class="btn btn-primary" onclick="switchTab('news')">📰 Dernières actualités</button>
+      <button class="btn btn-ghost" onclick="switchTab('istqb')">🎓 Testez vos connaissances</button>
+    </div>
+  </div>
+
+  <div class="stats-row reveal">
+    <div class="stat-card"><div class="stat-number">1M+</div><div class="stat-label">Certifications ISTQB délivrées</div></div>
+    <div class="stat-card"><div class="stat-number">76.8%</div><div class="stat-label">QA utilisant l'IA en 2026</div></div>
+    <div class="stat-card"><div class="stat-number">40+</div><div class="stat-label">Outils QA référencés</div></div>
+    <div class="stat-card"><div class="stat-number">6</div><div class="stat-label">Certifications couvertes</div></div>
+  </div>
+
+  <div class="grid grid-3 reveal" style="margin-top:28px">
+    <div class="card glow">
+      <div class="icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+      <h3 style="font-weight:700;font-size:17px;margin-bottom:6px">ISTQB Prep</h3>
+      <p style="color:var(--text2);font-size:14px;line-height:1.5">Questions réalistes pour Foundation Level, AI Testing et Advanced. Feedback immédiat avec explications.</p>
+    </div>
+    <div class="card glow">
+      <div class="icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+      <h3 style="font-weight:700;font-size:17px;margin-bottom:6px">Actualités en direct</h3>
+      <p style="color:var(--text2);font-size:14px;line-height:1.5">Les dernières évolutions ISTQB, AI Testing, outils QA et tendances du marché en 2026.</p>
+    </div>
+    <div class="card glow">
+      <div class="icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+      <h3 style="font-weight:700;font-size:17px;margin-bottom:6px">Roadmap QA 2026</h3>
+      <p style="color:var(--text2);font-size:14px;line-height:1.5">Du CTFL à l'expert : un parcours structuré pour maîtriser le testing moderne avec l'IA.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TAB: ACTUALITÉS ==================== -->
+<section class="tab-content" id="tab-news">
+  <h2 class="section-title reveal">Actualités QA</h2>
+  <p class="section-sub reveal">Les dernières évolutions du monde du test, de l'IA et des certifications.</p>
+  <div class="grid grid-2" id="newsGrid"></div>
+</section>
+
+<!-- ==================== TAB: IA & TESTING ==================== -->
+<section class="tab-content" id="tab-ai">
+  <h2 class="section-title reveal">IA & Testing</h2>
+  <p class="section-sub reveal">Ce qui fonctionne vraiment, ce qui reste du hype, et les outils qui changent la donne.</p>
+
+  <div class="reveal">
+    <div class="cat-header"><span>✅ Ce qui fonctionne vraiment</span><span class="accent-line"></span></div>
+    <div class="grid grid-2">
+      <div class="card"><div class="tag tag-ai" style="margin-bottom:8px">Self-healing</div><strong style="font-size:16px">Self-healing locators (mabl)</strong><p style="color:var(--text2);font-size:14px;margin-top:6px;line-height:1.5">Réduction de 85% de la maintenance des tests. Les locators se corrigent automatiquement quand le DOM change.</p></div>
+      <div class="card"><div class="tag tag-ai" style="margin-bottom:8px">Test Gen</div><strong style="font-size:16px">Génération de tests unitaires (Diffblue)</strong><p style="color:var(--text2);font-size:14px;margin-top:6px;line-height:1.5">94% de précision dans la génération de tests unitaires Java. Adoption massive dans les CI.</p></div>
+      <div class="card"><div class="tag tag-ai" style="margin-bottom:8px">Visual</div><strong style="font-size:16px">Visual diffing (Applitools)</strong><p style="color:var(--text2);font-size:14px;margin-top:6px;line-height:1.5">Réduction de 40% des faux positifs par rapport aux snapshots traditionnels. Détection pixel-level.</p></div>
+      <div class="card"><div class="tag tag-ai" style="margin-bottom:8px">Code Review</div><strong style="font-size:16px">Code review AI (Qodo, CodeRabbit, Copilot)</strong><p style="color:var(--text2);font-size:14px;margin-top:6px;line-height:1.5">Revue de PR automatisée, détection de bugs et suggestions de correctifs en temps réel.</p></div>
+    </div>
+  </div>
+
+  <div class="reveal" style="margin-top:28px">
+    <div class="cat-header"><span>⚠️ Ce qui reste du hype</span><span class="accent-line"></span></div>
+    <div class="grid grid-2">
+      <div class="card" style="border-color:rgba(239,68,68,.15)">
+        <p style="color:var(--text2);font-size:14px;line-height:1.5"><strong style="color:var(--text)">QA entièrement autonome</strong> — Les agents AI ne remplacent pas encore le jugement humain. Le "no human in the loop" est un mythe en 2026.</p>
+      </div>
+      <div class="card" style="border-color:rgba(239,68,68,.15)">
+        <p style="color:var(--text2);font-size:14px;line-height:1.5"><strong style="color:var(--text)">Décrire l'application → tests complets</strong> — La génération automatique de scénarios complets reste limitée aux cas simples.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="reveal" style="margin-top:28px">
+    <div class="cat-header"><span>🏆 Top outils AI 2026</span><span class="accent-line"></span></div>
+    <div class="grid grid-3" id="aiToolsGrid"></div>
+  </div>
+
+  <div class="reveal" style="margin-top:28px">
+    <div class="cat-header"><span>📈 Tendances 2026</span><span class="accent-line"></span></div>
+    <div class="grid grid-4">
+      <div class="card"><div style="font-size:28px;margin-bottom:8px">🔄</div><strong>Self-healing</strong><p style="color:var(--text2);font-size:13px;margin-top:4px">Locators qui s'adaptent automatiquement</p></div>
+      <div class="card"><div style="font-size:28px;margin-bottom:8px">👁️</div><strong>Visual diffing</strong><p style="color:var(--text2);font-size:13px;margin-top:4px">Comparaison pixel-level cross-browser</p></div>
+      <div class="card"><div style="font-size:28px;margin-bottom:8px">🧪</div><strong>Test gen</strong><p style="color:var(--text2);font-size:13px;margin-top:4px">Génération AI de cas de test</p></div>
+      <div class="card"><div style="font-size:28px;margin-bottom:8px">🤖</div><strong>Agents autonomes</strong><p style="color:var(--text2);font-size:13px;margin-top:4px">Exploration et exécution agentic</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TAB: OUTILS ==================== -->
+<section class="tab-content" id="tab-tools">
+  <h2 class="section-title reveal">Outils & Ressources</h2>
+  <p class="section-sub reveal">Une grille complète des outils QA par catégorie, mis à jour pour 2026.</p>
+  <div id="toolsGrid"></div>
+</section>
+
+<!-- ==================== TAB: FORMATIONS ==================== -->
+<section class="tab-content" id="tab-training">
+  <h2 class="section-title reveal">Formations & Certifications</h2>
+  <p class="section-sub reveal">Les certifications ISTQB 2026, la roadmap QA Engineer et les meilleures ressources.</p>
+
+  <div class="reveal">
+    <div class="cat-header"><span>🎓 Certifications ISTQB 2026</span><span class="accent-line"></span></div>
+    <div class="grid grid-2" id="certsGrid"></div>
+  </div>
+
+  <div class="reveal" style="margin-top:28px">
+    <div class="cat-header"><span>🗺️ Roadmap QA Engineer 2026</span><span class="accent-line"></span></div>
+    <div class="card" style="padding:24px">
+      <div class="roadmap">
+        <div class="road-step done"><div class="step-title">Étape 1 — CTFL Foundation Level</div><div class="step-desc">Obtenez la certification de base ISTQB. Comprenez les fondamentaux : processus, techniques, gestion.</div></div>
+        <div class="road-step"><div class="step-title">Étape 2 — Choisir une spécialisation</div><div class="step-desc">Automation (CTAL-TA), Performance, Sécurité, ou AI Testing (CT-AI / CT-GenAI).</div></div>
+        <div class="road-step"><div class="step-title">Étape 3 — Maîtriser un framework</div><div class="step-desc">Playwright (web E2E) ou k6 (performance) — les standards 2026.</div></div>
+        <div class="road-step"><div class="step-title">Étape 4 — CT-AI ou CT-GenAI</div><div class="step-desc">Spécialisez-vous dans le testing de systèmes intelligents et l'utilisation de l'IA générative.</div></div>
+        <div class="road-step"><div class="step-title">Étape 5 — Contribuer open-source</div><div class="step-desc">Participez à Playwright, Cypress, ou Bruno. Montez en crédibilité et réseau.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reveal" style="margin-top:28px">
+    <div class="cat-header"><span>📖 Ressources recommandées</span><span class="accent-line"></span></div>
+    <div class="grid grid-2" id="resourcesGrid"></div>
+  </div>
+</section>
+
+<!-- ==================== TAB: ISTQB PREP ==================== -->
+<section class="tab-content" id="tab-istqb">
+  <h2 class="section-title reveal">ISTQB Prep — Quiz interactif</h2>
+  <p class="section-sub reveal">Testez vos connaissances avec des questions réalistes. Feedback immédiat et score final.</p>
+  <div class="quiz-controls reveal">
+    <select id="quizDomain"><option value="ctfl">Foundation Level CTFL v4.0</option><option value="ctai">AI Testing (CT-AI)</option></select>
+    <button class="btn btn-primary" id="quizStartBtn">🎯 Démarrer le quiz</button>
+  </div>
+  <div id="quizArea"></div>
+  <div class="reveal" style="margin-top:20px;text-align:center;display:none" id="quizFinalScore">
+    <div class="card" style="display:inline-block;min-width:300px;padding:28px">
+      <div style="font-size:48px" id="quizFinalEmoji">🎉</div>
+      <div style="font-size:28px;font-weight:800;font-family:var(--font-display);margin-top:8px" id="quizFinalPct">0%</div>
+      <div style="color:var(--text2);margin-top:4px;font-size:15px" id="quizFinalLabel">Prêt pour l'examen</div>
+      <div style="margin-top:12px;font-size:14px;color:var(--muted)" id="quizFinalDetail">0/0 correct</div>
+      <button class="btn btn-primary" style="margin-top:14px" onclick="resetQuiz()">🔄 Recommencer</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-links">
+    <a href="https://www.istqb.org" target="_blank" rel="noopener noreferrer">ISTQB.org</a>
+    <a href="https://www.ministryoftesting.com" target="_blank" rel="noopener noreferrer">Ministry of Testing</a>
+    <a href="https://testautomationu.applitools.com" target="_blank" rel="noopener noreferrer">Test Automation University</a>
+    <a href="https://github.com/AtmanTest" target="_blank" rel="noopener noreferrer">GitHub</a>
+  </div>
+  <p>Construit avec 🧪 pour la communauté QA · <a href="https://atmantest.github.io/qa-universe/">QA Universe</a></p>
+</footer>
+
+<script>
+// ===== DATA =====
+const NEWS = [
+  {date:"Mai 2026",tag:"ISTQB",tagClass:"tag-istqb",title:"CTAL-AT v2.0 : nouvelle certification Agile Tester publiée",summary:"L'ISTQB a publié la v2.0 du Certified Tester Advanced Level Agile Tester, marquant une avancée majeure dans la certification Agile."},
+  {date:"Avril 2026",tag:"AI Testing",tagClass:"tag-ai",title:"CT-GenAI v1.1 : mise à jour du syllabus Testing with Generative AI",summary:"Mise à jour mineure v1.1 du syllabus CT-GenAI, enrichissant les bonnes pratiques de test avec les LLMs."},
+  {date:"Mars 2026",tag:"ISTQB",tagClass:"tag-istqb",title:"1 000 000 certifications ISTQB délivrées dans le monde",summary:"Milestone historique : l'ISTQB a franchi le cap du million de certificats délivrés lors de son General Assembly à Dubaï."},
+  {date:"Fév 2026",tag:"AI Testing",tagClass:"tag-ai",title:"AI Testing 2026 : 76.8% des QA utilisent l'IA",summary:"Le rapport PractiTest 2026 révèle que 76,8% des professionnels QA utilisent l'IA, dont 70% pour la création de cas de test."},
+  {date:"Jan 2026",tag:"ISTQB",tagClass:"tag-istqb",title:"CT-AI Syllabus v2.0 : mise à jour majeure",summary:"L'ISTQB publie une mise à jour significative du syllabus Certified Tester AI Testing, avec de nouveaux modules sur les LLMs."},
+  {date:"Jan 2026",tag:"Outils",tagClass:"tag-outils",title:"Playwright devient le framework E2E de référence 2026",summary:"Playwright s'impose comme standard pour les tests E2E cross-browser, avec une adoption massive dans les stacks de production."}
+];
+
+const AI_TOOLS = [
+  {name:"mabl",desc:"Self-healing et test gen basés sur l'IA. Réduction de 85% de la maintenance.",icon:"M"},
+  {name:"Applitools",desc:"Visual AI testing avec détection pixel-level. -40% faux positifs.",icon:"A"},
+  {name:"Diffblue Cover",desc:"Génération de tests unitaires Java par IA. 94% de précision.",icon:"D"},
+  {name:"testRigor",desc:"Tests end-to-end en langage naturel. Idéal pour les équipes non-tech.",icon:"T"},
+  {name:"QA Wolf",desc:"Plateforme de test automatisé avec maintenance AI. Scalable.",icon:"Q"},
+  {name:"Qodo (CodiumAI)",desc:"Analyse de code et génération de tests contextuels.",icon:"Q"},
+  {name:"CodeRabbit",desc:"Review de PR automatisée par IA. Bugs et suggestions.",icon:"C"},
+  {name:"GitHub Copilot",desc:"Autocomplétion de tests et suggestions dans l'IDE.",icon:"G"},
+  {name:"Playwright + Claude",desc:"Génération de tests E2E via prompts en langage naturel.",icon:"P"},
+  {name:"Healenium",desc:"Self-healing open-source pour Selenium. Locators auto-réparés.",icon:"H"}
+];
+
+const TOOLS_BY_CAT = {
+  "Automation Web":[
+    {name:"Playwright",desc:"Framework E2E cross-browser moderne. Multi-navigateur, rapide, fiable.",star:true},
+    {name:"Cypress",desc:"Framework E2E JavaScript avec Time Travel et debugging intégré.",star:false},
+    {name:"Selenium",desc:"Le standard historique. Support multi-langage et multi-navigateur.",star:false}
+  ],
+  "API":[
+    {name:"Postman",desc:"Client API complet avec collections, environnements et tests automatisés.",star:false},
+    {name:"Bruno",desc:"Client API open-source, local-first. Git-friendly et performant.",star:true},
+    {name:"REST Assured",desc:"Bibliothèque Java pour tests d'API REST. DSL lisible et fluide.",star:false}
+  ],
+  "Mobile":[
+    {name:"Appium",desc:"Framework cross-platform pour tests mobile (iOS/Android).",star:false},
+    {name:"Detox",desc:"Framework React Native avec synchronisation automatique.",star:false}
+  ],
+  "Performance":[
+    {name:"k6",desc:"Outil de test de charge moderne, scriptable en JavaScript/TypeScript.",star:true},
+    {name:"JMeter",desc:"Outil de performance historique. Support de multiples protocoles.",star:false},
+    {name:"Gatling",desc:"Framework de performance Scala avec rapports riches.",star:false}
+  ],
+  "Sécurité":[
+    {name:"Burp Suite",desc:"Scanner de sécurité web professionnel. Interception et test d'intrusion.",star:false},
+    {name:"OWASP ZAP",desc:"Scanner open-source de sécurité web. Idéal CI/CD.",star:false}
+  ],
+  "Management":[
+    {name:"TestRail",desc:"Gestionnaire de cas de test et reporting. Intégration CI.",star:false},
+    {name:"qTest",desc:"Plateforme de gestion QA avec analytics et traçabilité.",star:false},
+    {name:"Xray for Jira",desc:"Test management natif Jira. BDD et exécution intégrée.",star:false}
+  ],
+  "Visual":[
+    {name:"Applitools",desc:"Test visuel AI avec détection pixel-level cross-browser.",star:true},
+    {name:"Percy",desc:"Visual review et diffing par BrowserStack. Automatisé en CI.",star:false},
+    {name:"Chromatic",desc:"Review visuelle pour Storybook. Idéal pour design systems.",star:false}
+  ]
+};
+
+const CERTS = [
+  {badge:"foundation",badgeText:"Foundation",title:"CTFL v4.0 — Foundation Level",desc:"Le point d'entrée. Comprenez les fondamentaux du test logiciel : processus, techniques, gestion des risques."},
+  {badge:"advanced",badgeText:"Advanced",title:"CTAL-TA v4.0 — Test Analyst",desc:"Spécialisation analyse de test : conception avancée, revues, techniques black-box et white-box."},
+  {badge:"advanced",badgeText:"AI",title:"CT-AI v2.0 — AI Testing",desc:"Certification spécialisée dans le test des systèmes basés sur l'IA et le machine learning."},
+  {badge:"new",badgeText:"Nouveau",title:"CT-GenAI v1.1 — Generative AI Testing",desc:"Test avec et pour l'IA générative. LLMs, prompts, évaluation des modèles de langage."},
+  {badge:"advanced",badgeText:"Advanced",title:"CTAL-AT v2.0 — Agile Tester",desc:"Certification Agile de niveau avancé. Testing dans les environnements Agile et DevOps."}
+];
+
+const RESOURCES = [
+  {name:"Ministry of Testing",desc:"La communauté QA la plus active. Blogs, webinars, conférences et cours.",url:"https://www.ministryoftesting.com"},
+  {name:"Test Automation University",desc:"Cours gratuits sur l'automatisation des tests. Applitools, Playwright, API.",url:"https://testautomationu.applitools.com"},
+  {name:"ISTQB.org",desc:"Site officiel. Syllabi, examens blancs, glossaire et informations des certifications.",url:"https://www.istqb.org"},
+  {name:"The Way of the Web Tester",desc:"Livre de référence sur le testing web moderne par Jonathan Rasmusson.",url:"#"},
+  {name:"Crosscheck.cloud Blog",desc:"Articles techniques sur le testing cross-browser et les stratégies QA.",url:"https://crosscheck.cloud/blog"}
+];
+
+// ===== QUIZ DATA =====
+const QUIZ_CTFL = [
+  {q:"Quel est l'objectif principal du test selon l'ISTQB ?",opts:["Trouver tous les bugs avant livraison","Réduire le risque de défaillance en production","Remplacer la revue de code","Automatiser toutes les vérifications"],correct:1,expl:"L'objectif principal du test est de réduire le risque de défaillance en production en fournissant des informations sur la qualité du produit."},
+  {q:"Quelle est la différence entre erreur, défaut et défaillance ?",opts:["Ce sont trois synonymes","L'erreur humaine produit un défaut qui peut causer une défaillance","La défaillance est toujours précédée d'une erreur humaine","Le défaut est le même que l'erreur"],correct:1,expl:"La chaîne correcte est : Erreur humaine → Défaut (dans le code) → Défaillance (observée pendant l'exécution)."},
+  {q:"Le test exhaustif est impossible sauf pour des cas triviaux. À quel principe cela correspond-il ?",opts:["Le test montre la présence, pas l'absence de défauts","Le test exhaustif est impossible","Tester tôt réduit les coûts","L'absence de défaut n'est pas la qualité"],correct:1,expl:"L'un des 7 principes fondamentaux : il est impossible de tester toutes les combinaisons d'entrées et de conditions."},
+  {q:"Qu'est-ce que la traçabilité dans le contexte du test ?",opts:["La capacité à suivre les bugs dans le temps","Lien bidirectionnel entre base de test, conditions et cas de test","Le suivi des performances des testeurs","La documentation des tests exécutés"],correct:1,expl:"La traçabilité permet de relier les conditions de test aux exigences et aux cas de test, tant vers l'avant que vers l'arrière."},
+  {q:"Quelle technique de test est principalement basée sur la structure interne du code ?",opts:["Test fonctionnel","Test boîte blanche","Test exploratoire","Test de charge"],correct:1,expl:"Le test boîte blanche (structurel) analyse la structure interne du code : branches, chemins, conditions."},
+  {q:"Quel niveau de test vient en premier dans le cycle de développement ?",opts:["Test système","Test d'intégration","Test de composant","Test de recette"],correct:2,expl:"Le test de composant (unitaire) est le premier niveau, suivi par l'intégration, puis le système, puis la recette."},
+  {q:"Qu'est-ce qu'un critère de couverture ?",opts:["Le nombre de bugs trouvés","Une mesure du degré auquel un élément est couvert par des tests","La date de fin des tests","Le budget alloué"],correct:1,expl:"Un critère de couverture définit la quantité de test effectué pour un objet donné (ex: 100% des branches)."},
+  {q:"Quel est l'avantage principal des revues statiques ?",opts:["Elles ne nécessitent pas d'exécution du code","Elles sont automatisables à 100%","Elles remplacent les tests dynamiques","Elles trouvent tous les défauts"],correct:0,expl:"Les revues statiques (walkthrough, inspection) trouvent des défauts sans exécuter le code, souvent tôt dans le cycle."},
+  {q:"Qu'est-ce que le test basé sur les risques ?",opts:["Tester uniquement les fonctionnalités faciles","Prioriser les tests selon la probabilité et l'impact des risques","Tester après chaque déploiement","Ignorer les risques"],correct:1,expl:"Le test basé sur les risques utilise l'analyse des risques (probabilité × impact) pour prioriser les activités de test."},
+  {q:"Quelle est la différence entre test de confirmation et test de régression ?",opts:["C'est la même chose","Le test de confirmation vérifie la correction d'un défaut ; la régression vérifie qu'aucun nouveau défaut n'est introduit","La régression vient avant la confirmation","Le test de confirmation est plus rapide"],correct:1,expl:"Après correction d'un défaut, on fait un test de confirmation. La régression vérifie l'absence d'effets secondaires."},
+  {q:"Quel est le rôle principal d'un test leader selon ISTQB ?",opts:["Écrire tous les tests","Planifier, estimer et coordonner les activités de test","Trouver le maximum de bugs","Automatiser tous les tests"],correct:1,expl:"Le test leader planifie, estime, coordonne et supervise les activités de test au niveau du projet."},
+  {q:"Qu'est-ce qu'un oracle de test ?",opts:["Un outil de test oracle","Une source permettant de déterminer le résultat attendu","Un développeur expert","Un type de base de données"],correct:1,expl:"Un oracle de test est une source d'information (spécification, documentation, expert) qui permet de déterminer si un test a réussi ou échoué."},
+  {q:"Dans le processus de test, que se passe-t-il pendant la phase d'analyse ?",opts:["On exécute les tests","On analyse la base de test pour identifier les conditions testables","On clôture les rapports de bugs","On déploie l'application"],correct:1,expl:"L'analyse de test consiste à examiner la base de test (exigences, user stories) pour identifier ce qui doit être testé."},
+  {q:"Qu'est-ce que le test exploratoire ?",opts:["Un test sans documentation préalable où le testeur explore librement","Un test automatisé sans intervention humaine","Un test de performance basé sur les logs","Un test de sécurité"],correct:0,expl:"Le test exploratoire est une approche où le testeur conçoit et exécute les tests simultanément, en explorant l'application sans scripts prédéfinis."},
+  {q:"Quelle est la principale raison d'utiliser des techniques de conception de test ?",opts:["Pour réduire le nombre de testeurs","Pour produire des cas de test systématiques et mesurer la couverture","Pour automatiser plus vite","Pour respecter les délais"],correct:1,expl:"Les techniques de conception (partitionnement, valeurs limites, tables de décision) produisent des tests systématiques avec une couverture mesurable."},
+  {q:"Qu'est-ce que la maintenabilité en test logiciel ?",opts:["La capacité d'un test à être exécuté rapidement","La facilité avec laquelle un test peut être modifié ou mis à jour","Le nombre de bugs trouvés par test","La durée d'exécution d'un test"],correct:1,expl:"La maintenabilité mesure la facilité à modifier les tests existants lorsque le logiciel évolue."},
+  {q:"Qu'est-ce qu'un faux positif en test automatisé ?",opts:["Un test qui passe alors qu'il devrait échouer","Un test qui échoue alors qu'il devrait passer","Un bug non détecté","Une nouvelle fonctionnalité"],correct:1,expl:"Un faux positif (false positive) est un test qui échoue pour une raison non liée au comportement attendu de l'application."},
+  {q:"Dans le test de performance, que mesure la latence ?",opts:["Le nombre d'utilisateurs simultanés","Le temps de réponse entre une requête et sa réponse","La consommation mémoire","Le nombre de transactions par seconde"],correct:1,expl:"La latence (temps de réponse) mesure le délai entre l'envoi d'une requête et la réception de la réponse."},
+  {q:"Qu'est-ce que le TDD (Test-Driven Development) ?",opts:["Test après développement","Écrire le test avant le code, puis faire passer le test","Tester le système après déploiement","Développer sans tests"],correct:1,expl:"Le TDD consiste à écrire un test qui échoue d'abord, puis le code minimum pour le faire passer, puis refactoriser."},
+  {q:"Quel est l'objectif du test d'acceptation ?",opts:["Tester tous les chemins du code","Valider que le système répond aux besoins des utilisateurs","Trouver tous les bugs","Optimiser les performances"],correct:1,expl:"Le test d'acceptation (recette) vise à faire valider par les utilisateurs que le système répond à leurs besoins et exigences."}
+];
+
+const QUIZ_CTAI = [
+  {q:"Dans le contexte de l'AI Testing, qu'est-ce que le 'self-healing test' ?",opts:["Un test qui se corrige automatiquement quand les sélecteurs changent","Un test qui s'exécute sans intervention humaine","Un test basé sur du machine learning","Un test sans assertion"],correct:0,expl:"Le self-healing permet aux tests de s'adapter automatiquement aux changements de l'interface (locators CSS/XPath) sans intervention manuelle."},
+  {q:"Qu'est-ce qu'un test adversarial dans le contexte AI ?",opts:["Un test entre deux équipes","Un test qui cherche à tromper un modèle AI avec des entrées malveillantes","Un test de performance","Une compétition entre testeurs"],correct:1,expl:"Les tests adversariaux consistent à générer des entrées qui forcent le modèle AI à faire des erreurs, révélant ainsi ses faiblesses."},
+  {q:"Qu'est-ce que l'IA explicable (XAI) dans le cadre du test ?",opts:["Une IA qui explique comment elle arrive à ses conclusions","Un test qui s'explique tout seul","Un outil de reporting","Une méthode de debug"],correct:0,expl:"L'IA explicable (XAI) permet de comprendre et valider les décisions des modèles, ce qui est essentiel pour la confiance et la certification."},
+  {q:"Quel est le défi principal du test des LLMs ?",opts:["Leur taille en mémoire","La non-déterminisme des réponses et la difficulté à définir les résultats attendus","Le coût d'exécution","Le manque d'outils"],correct:1,expl:"Les LLMs produisent des réponses variables et créatives, rendant difficile la définition d'un oracle de test (résultat attendu)."},
+  {q:"Qu'est-ce que le data drift dans le contexte AI Testing ?",opts:["Une fuite de données","Le changement de distribution des données d'entrée au fil du temps, dégradant la performance du modèle","Une technique d'augmentation","Un bug dans les données"],correct:1,expl:"Le data drift se produit quand les données d'entrée changent par rapport aux données d'entraînement, ce qui peut dégrader les prédictions du modèle."},
+  {q:"Quel outil AI est le plus utilisé pour la génération de cas de test ?",opts:["Selenium","GitHub Copilot","Applitools","k6"],correct:1,expl:"GitHub Copilot, basé sur les LLMs, est massivement utilisé pour générer des snippets et des cas de test dans l'IDE."},
+  {q:"Qu'est-ce que la 'couverture de comportement' en AI Testing ?",opts:["Le nombre de lignes de code exécutées","La diversité des comportements et entrées explorés pour un modèle AI","Le pourcentage de tests automatisés","Le nombre de boucles de rétroaction"],correct:1,expl:"La couverture de comportement mesure à quel point les différents chemins de décision et cas limites du modèle AI sont explorés."},
+  {q:"Quel est l'avantage principal du visual testing AI (Applitools) ?",opts:["Il ne nécessite pas de code","Il détecte les différences visuelles que les tests traditionnels ratent","Il est gratuit","Il remplace tous les autres tests"],correct:1,expl:"Le visual testing AI détecte les régressions visuelles subtiles souvent invisibles pour les tests fonctionnels traditionnels."},
+  {q:"Comment valider un modèle AI en production ?",opts:["Uniquement en pré-prod","Monitoring continu avec détection de drift et tests A/B","On ne valide pas en production","Avec des tests unitaires"],correct:1,expl:"La validation en production d'un modèle AI nécessite un monitoring continu, la détection de drift, et des tests A/B réguliers."},
+  {q:"Quelle est la recommandation pour tester un chatbot LLM ?",opts:["Uniquement des tests automatisés","Une combinaison de tests automatisés pour les cas standards et de tests exploratoires pour les cas limites","Tester manuellement seulement","Ne pas tester les LLMs"],correct:1,expl:"Les chatbots LLM nécessitent une approche hybride : tests automatisés pour les réponses attendues, tests exploratoires pour les cas imprévus."}
+];
+
+// ===== STATE =====
+let activeTab = 'home';
+let quizState = null; // { domain, current, questions:[], answers:{}, finished:false }
+
+// ===== NAV =====
+function switchTab(tab){
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.querySelector(`.nav-tab[data-tab="${tab}"]`).classList.add('active');
+  activeTab = tab;
+  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(revealAll,100);
+}
+document.querySelectorAll('.nav-tab').forEach(btn=>{
+  btn.addEventListener('click',()=>switchTab(btn.dataset.tab));
+});
+
+// ===== RENDER =====
+function renderNews(){
+  const g = document.getElementById('newsGrid');
+  g.innerHTML = NEWS.map(n=>`
+    <div class="news-card reveal">
+      <div class="news-meta"><span>${n.date}</span><span class="tag ${n.tagClass}">${n.tag}</span></div>
+      <div class="news-title">${n.title}</div>
+      <div class="news-summary">${n.summary}</div>
+    </div>
+  `).join('');
+}
+
+function renderAITools(){
+  const g = document.getElementById('aiToolsGrid');
+  g.innerHTML = AI_TOOLS.map(t=>`
+    <div class="card reveal">
+      <div class="tool-icon" style="width:36px;height:36px;font-size:13px;margin-bottom:10px">${t.icon}</div>
+      <strong style="font-size:15px">${t.name}</strong>
+      <p style="color:var(--text2);font-size:13px;margin-top:4px;line-height:1.5">${t.desc}</p>
+    </div>
+  `).join('');
+}
+
+function renderTools(){
+  const container = document.getElementById('toolsGrid');
+  let html = '';
+  for(const [cat, tools] of Object.entries(TOOLS_BY_CAT)){
+    html += `<div class="reveal"><div class="cat-header" style="margin-top:${html?'20px':'0'}"><span>${cat}</span><span class="accent-line"></span></div><div class="grid grid-3">`;
+    tools.forEach(t => {
+      html += `<div class="tool-card"><div class="tool-icon">${t.name[0]}</div><div class="tool-info"><div class="tool-name">${t.name}${t.star?' <span class="tool-star">★</span>':''}</div><div class="tool-desc">${t.desc}</div></div></div>`;
+    });
+    html += '</div></div>';
+  }
+  container.innerHTML = html;
+}
+
+function renderCerts(){
+  const g = document.getElementById('certsGrid');
+  g.innerHTML = CERTS.map(c=>`
+    <div class="cert-card reveal">
+      <span class="cert-badge ${c.badge}">${c.badgeText}</span>
+      <div class="cert-title">${c.title}</div>
+      <div class="cert-desc">${c.desc}</div>
+    </div>
+  `).join('');
+}
+
+function renderResources(){
+  const g = document.getElementById('resourcesGrid');
+  g.innerHTML = RESOURCES.map(r=>`
+    <div class="tool-card reveal" onclick="window.open('${r.url}','_blank')" style="cursor:pointer">
+      <div class="tool-icon" style="background:rgba(0,194,168,.1);color:var(--accent)">📖</div>
+      <div class="tool-info"><div class="tool-name">${r.name}</div><div class="tool-desc">${r.desc}</div></div>
+    </div>
+  `).join('');
+}
+
+// ===== QUIZ =====
+const QUIZ_OPTIONS = 'ABCD';
+function startQuiz(domain){
+  const pool = domain === 'ctai' ? QUIZ_CTAI : QUIZ_CTFL;
+  const shuffled = [...pool].sort(()=>Math.random()-.5);
+  quizState = {domain,current:0,questions:shuffled,answers:{},finished:false};
+  document.getElementById('quizFinalScore').style.display = 'none';
+  renderQuizQuestion();
+}
+function renderQuizQuestion(){
+  const area = document.getElementById('quizArea');
+  if(!quizState || quizState.finished) return;
+  const q = quizState.questions[quizState.current];
+  const answered = quizState.answers[quizState.current];
+  area.innerHTML = `
+    <div class="card reveal">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap">
+        <span class="tag ${quizState.domain==='ctai'?'tag-ai':'tag-istqb'}">${quizState.domain==='ctai'?'AI Testing':'Foundation Level'}</span>
+        <span style="color:var(--muted);font-size:13px">Question ${quizState.current+1}/${quizState.questions.length}</span>
+        <span style="color:var(--muted);font-size:13px">· ${Object.keys(quizState.answers).length} répondue(s)</span>
+      </div>
+      <div class="quiz-question">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt,i)=>{
+          let cls = '';
+          if(answered !== undefined){
+            if(i === q.correct) cls = 'correct';
+            else if(i === answered.selected) cls = 'wrong';
+          }
+          return `<div class="quiz-opt ${cls}" data-idx="${i}"><span class="letter">${QUIZ_OPTIONS[i]}</span>${opt}</div>`;
+        }).join('')}
+      </div>
+      <div class="quiz-result ${answered?'show':''}" id="quizResult">
+        ${answered ? `<span class="emoji">${answered.correct?'✅':'❌'}</span> ${answered.correct?'Correct !':'Incorrect.'} ${q.expl}` : ''}
+      </div>
+      <div class="quiz-footer">
+        <div class="quiz-score">Score : <strong>${scoreSoFar()}</strong> / ${Object.keys(quizState.answers).length}</div>
+        <div style="display:flex;gap:10px">
+          ${answered ? (quizState.current < quizState.questions.length-1
+            ? `<button class="btn btn-primary" onclick="nextQuestion()">Suivant →</button>`
+            : `<button class="btn btn-primary" onclick="finishQuiz()">Voir mon score 🏁</button>`)
+          : `<button class="btn btn-primary" id="quizValidateBtn">Valider</button>`}
+        </div>
+      </div>
+    </div>
+  `;
+  // Attach option clicks if not answered
+  if(answered === undefined){
+    document.querySelectorAll('.quiz-opt').forEach(el=>{
+      el.addEventListener('click',()=>{
+        document.querySelectorAll('.quiz-opt').forEach(e=>e.classList.remove('selected'));
+        el.classList.add('selected');
+        el.querySelector('.letter').style.borderColor = 'var(--accent)';
+      });
+    });
+    document.getElementById('quizValidateBtn').addEventListener('click',validateAnswer);
+  }
+  revealAll();
+}
+function validateAnswer(){
+  const selected = document.querySelector('.quiz-opt.selected');
+  if(!selected) return;
+  const idx = parseInt(selected.dataset.idx,10);
+  const q = quizState.questions[quizState.current];
+  const correct = idx === q.correct;
+  quizState.answers[quizState.current] = {selected:idx,correct};
+  renderQuizQuestion();
+}
+function nextQuestion(){
+  quizState.current++;
+  renderQuizQuestion();
+}
+function finishQuiz(){
+  quizState.finished = true;
+  const total = quizState.questions.length;
+  const correct = Object.values(quizState.answers).filter(a=>a.correct).length;
+  const pct = Math.round((correct/total)*100);
+  document.getElementById('quizArea').innerHTML = '';
+  document.getElementById('quizFinalScore').style.display = 'block';
+  document.getElementById('quizFinalPct').textContent = pct+'%';
+  document.getElementById('quizFinalDetail').textContent = correct+'/'+total+' correct';
+  let emoji = '🎉', label = 'Prêt pour l\'examen !';
+  if(pct < 40){emoji='📚';label='Novice — Continuez à réviser';}
+  else if(pct < 65){emoji='📖';label='Intermédiaire — Renforcez vos points faibles';}
+  document.getElementById('quizFinalEmoji').textContent = emoji;
+  document.getElementById('quizFinalLabel').textContent = label;
+}
+function resetQuiz(){
+  quizState = null;
+  document.getElementById('quizFinalScore').style.display = 'none';
+  document.getElementById('quizArea').innerHTML = `
+    <div class="card" style="text-align:center;padding:32px">
+      <div style="font-size:24px;margin-bottom:8px">Sélectionnez un domaine et cliquez sur Démarrer</div>
+      <div style="color:var(--text2);font-size:14px">${QUIZ_CTFL.length} questions Foundation Level · ${QUIZ_CTAI.length} questions AI Testing</div>
+    </div>
+  `;
+}
+function scoreSoFar(){
+  return Object.values(quizState.answers).filter(a=>a.correct).length;
+}
+document.getElementById('quizStartBtn').addEventListener('click',()=>{
+  const domain = document.getElementById('quizDomain').value;
+  startQuiz(domain);
+});
+resetQuiz();
+
+// ===== SCROLL REVEAL =====
+function revealAll(){
+  document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'));
+}
+function initReveal(){
+  const els = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    const obs = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+    },{rootMargin:'0px 0px -40px 0px'});
+    els.forEach(el=>{el.classList.remove('visible');obs.observe(el);});
+  } else {
+    els.forEach(el=>el.classList.add('visible'));
+  }
+}
+initReveal();
+// Reveal visible tabs immediately
+setTimeout(revealAll,200);
+
+// ===== THEME =====
+const themeToggle = document.getElementById('themeToggle');
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  themeToggle.textContent = t === 'dark' ? '🌙' : '☀️';
+}
+themeToggle.addEventListener('click',()=>{
+  const cur = document.documentElement.getAttribute('data-theme');
+  setTheme(cur === 'dark' ? 'light' : 'dark');
+});
+
+// ===== INIT =====
+renderNews();
+renderAITools();
+renderTools();
+renderCerts();
+renderResources();
+
+// Init Lucide icons if available
+if(window.lucide) lucide.createIcons();
+
+console.log('🚀 QA Universe loaded — https://atmantest.github.io/qa-universe/');
+</script>
+</body>
+</html>
