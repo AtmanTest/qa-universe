@@ -426,8 +426,10 @@ footer a{color:var(--accent);text-decoration:none}
 .tool-modal-icon{width:40px;height:40px;border-radius:var(--radius-sm);background:var(--accent-dim);color:var(--accent);display:grid;place-items:center;font-weight:800;font-size:18px;flex-shrink:0}
 .tool-modal-name{font-family:var(--font-display);font-size:20px;font-weight:700;flex:1}
 .tool-modal-actions{display:flex;gap:8px;align-items:center}
-.tool-modal-actions a,.tool-modal-close{width:36px;height:36px;border-radius:var(--radius-sm);border:1px solid var(--border);display:grid;place-items:center;cursor:pointer;background:transparent;color:var(--text2);font-size:16px;text-decoration:none;transition:all .15s}
-.tool-modal-actions a:hover,.tool-modal-close:hover{background:var(--surface2);color:var(--text)}
+.tool-modal-actions a.doc-link{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:var(--radius-sm);border:1px solid var(--accent);background:rgba(0,150,255,.08);color:var(--accent2,#5898ff);font-size:13px;font-weight:500;text-decoration:none;cursor:pointer;transition:all .15s}
+.tool-modal-actions a.doc-link:hover{background:rgba(0,150,255,.18);border-color:var(--accent2);color:var(--text)}
+.tool-modal-actions .tool-modal-close{width:36px;height:36px;border-radius:var(--radius-sm);border:1px solid var(--border);display:grid;place-items:center;cursor:pointer;background:transparent;color:var(--text2);font-size:16px;text-decoration:none;transition:all .15s;flex-shrink:0}
+.tool-modal-actions .tool-modal-close:hover{background:var(--surface2);color:var(--text)}
 .tool-modal-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0;padding:0 20px}
 .tool-modal-tabs::-webkit-scrollbar{display:none}
 .tool-modal-tab{padding:10px 16px;border:none;background:transparent;color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .12s;font-family:var(--font-body)}
@@ -710,7 +712,7 @@ footer a{color:var(--accent);text-decoration:none}
       <div class="tool-modal-icon" id="tmIcon">P</div>
       <div class="tool-modal-name" id="tmName">Playwright</div>
       <div class="tool-modal-actions">
-        <a id="tmDocsBtn" href="#" target="_blank" title="Docs officielles">📄</a>
+        <a id="tmDocsBtn" class="doc-link" href="#" target="_blank">📖 Documentation officielle</a>
         <div class="tool-modal-close" onclick="closeToolDetail()">✕</div>
       </div>
     </div>
