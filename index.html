@@ -360,6 +360,7 @@ main{max-width:1280px;margin:0 auto;padding:0 24px}
 .tool-card::after{content:'→';position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--accent);opacity:0;transition:all .25s ease}
 .tool-card:hover::after{opacity:.6;right:12px}
 .tool-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,229,200,.1);border-color:rgba(0,229,200,.2)!important}
+.tm-init{width:38px;height:38px;border-radius:var(--radius-sm);background:rgba(0,229,200,.1);color:var(--accent);display:grid;place-items:center;font-weight:700;flex-shrink:0;font-size:16px}
 /* Weak area rows (JS-generated) */
 .dash-wk-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
 .dash-wk-item:last-child{border:none}
@@ -416,6 +417,44 @@ main{max-width:1280px;margin:0 auto;padding:0 24px}
 .nav-text{display:inline}@media(max-width:768px){.nav-text{display:none}.nav-btn-lang{font-size:16px;padding:0 6px}}
 footer{border-top:1px solid var(--border);padding:28px 24px;text-align:center;color:var(--muted);font-size:13px;margin-top:40px}
 footer a{color:var(--accent);text-decoration:none}
+/* === Tool Detail Modal === */
+.tool-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.tool-overlay.show{opacity:1;pointer-events:auto}
+.tool-modal{width:100%;max-width:860px;margin:auto;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transform:translateY(30px);opacity:0;transition:all .3s cubic-bezier(.22,1,.36,1);max-height:90vh;display:flex;flex-direction:column}
+.tool-overlay.show .tool-modal{transform:translateY(0);opacity:1}
+.tool-modal-header{display:flex;align-items:center;gap:12px;padding:18px 20px;border-bottom:1px solid var(--border);flex-shrink:0}
+.tool-modal-icon{width:40px;height:40px;border-radius:var(--radius-sm);background:var(--accent-dim);color:var(--accent);display:grid;place-items:center;font-weight:800;font-size:18px;flex-shrink:0}
+.tool-modal-name{font-family:var(--font-display);font-size:20px;font-weight:700;flex:1}
+.tool-modal-actions{display:flex;gap:8px;align-items:center}
+.tool-modal-actions a,.tool-modal-close{width:36px;height:36px;border-radius:var(--radius-sm);border:1px solid var(--border);display:grid;place-items:center;cursor:pointer;background:transparent;color:var(--text2);font-size:16px;text-decoration:none;transition:all .15s}
+.tool-modal-actions a:hover,.tool-modal-close:hover{background:var(--surface2);color:var(--text)}
+.tool-modal-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0;padding:0 20px}
+.tool-modal-tabs::-webkit-scrollbar{display:none}
+.tool-modal-tab{padding:10px 16px;border:none;background:transparent;color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .12s;font-family:var(--font-body)}
+.tool-modal-tab:hover{color:var(--text)}
+.tool-modal-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tool-modal-body{flex:1;overflow-y:auto;padding:20px}
+.tool-modal-sec{display:none;animation:fadeIn .2s ease}
+.tool-modal-sec.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.tm-title{font-size:14px;font-weight:700;color:var(--accent);margin:16px 0 10px}
+.tm-title:first-child{margin-top:0}
+.tm-list{display:flex;flex-direction:column;gap:6px;padding:0;margin:0;list-style:none}
+.tm-list li{font-size:13px;padding:8px 12px;background:var(--surface2);border-radius:var(--radius-sm);border-left:3px solid var(--accent);line-height:1.5;color:var(--text2)}
+.tm-list li code{background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;font-size:12px;color:var(--accent);font-family:var(--font-body)}
+.tm-cmd-tbl{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0}
+.tm-cmd-tbl th{text-align:left;padding:8px 10px;background:var(--surface2);color:var(--muted);font-weight:600;border-bottom:1px solid var(--border)}
+.tm-cmd-tbl td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+.tm-cmd-tbl td:first-child{font-family:monospace;font-size:12px;color:var(--accent);white-space:pre-wrap;word-break:break-all;width:45%}
+.tm-cmd-tbl td:last-child{color:var(--text2)}
+.tm-cmd-tbl tr:hover{background:var(--surface2)}
+.tm-tip{padding:12px 16px;background:var(--surface2);border-radius:var(--radius-sm);border-left:3px solid var(--accent2);font-size:13px;line-height:1.5;color:var(--text2);margin-bottom:8px}
+.tm-faq{border-bottom:1px solid var(--border);padding:12px 0}
+.tm-fq{font-weight:600;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--text)}
+.tm-fq::before{content:'▸';color:var(--accent);transition:transform .2s}
+.tm-fq.open::before{transform:rotate(90deg)}
+.tm-fa{display:none;margin-top:8px;font-size:13px;color:var(--text2);line-height:1.6;padding-left:20px}
+.tm-fa.show{display:block}
 </style>
 </head>
 <body>
@@ -663,6 +702,29 @@ footer a{color:var(--accent);text-decoration:none}
   </div>
 </section>
 </main>
+
+<!-- Tool Detail Modal -->
+<div id="toolOverlay" class="tool-overlay" onclick="if(event.target===this)closeToolDetail()">
+  <div class="tool-modal">
+    <div class="tool-modal-header">
+      <div class="tool-modal-icon" id="tmIcon">P</div>
+      <div class="tool-modal-name" id="tmName">Playwright</div>
+      <div class="tool-modal-actions">
+        <a id="tmDocsBtn" href="#" target="_blank" title="Docs officielles">📄</a>
+        <div class="tool-modal-close" onclick="closeToolDetail()">✕</div>
+      </div>
+    </div>
+    <div class="tool-modal-tabs" id="tmTabs">
+      <button class="tool-modal-tab active" data-tab="prereqs">📋 Prérequis</button>
+      <button class="tool-modal-tab" data-tab="install">💻 Installation</button>
+      <button class="tool-modal-tab" data-tab="cli">⌨️ CLI</button>
+      <button class="tool-modal-tab" data-tab="api">🔧 API</button>
+      <button class="tool-modal-tab" data-tab="tips">💡 Tips</button>
+      <button class="tool-modal-tab" data-tab="faq">❓ FAQ</button>
+    </div>
+    <div class="tool-modal-body" id="tmBody"></div>
+  </div>
+</div>
 
 <footer>
   <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:10px">
@@ -1086,7 +1148,7 @@ function renderTools(){
   for(const[cat,tools]of Object.entries(TC)){
     h+=`<div><div class="cat-header"><span>${cat}</span><span class="accent-line"></span></div><div class="grid grid-3">`;
     tools.forEach(([n,d,s,u])=>{
-      h+=`<div class="glass tool-card" onclick="window.open('${u}','_blank')" style="padding:18px;display:flex;align-items:flex-start;gap:12px;cursor:pointer"><div style="width:38px;height:38px;border-radius:var(--radius-sm);background:rgba(0,229,200,.1);color:var(--accent);display:grid;place-items:center;font-weight:700;flex-shrink:0;font-size:16px">${n[0]}</div><div style="flex:1;min-width:0"><strong style="font-size:14px">${n}${s?' <span style="color:var(--accent2);font-size:11px">★</span>':''}</strong><p style="color:var(--text2);font-size:12px;margin-top:2px">${d}</p><span style="color:var(--accent);font-size:11px;opacity:.7;margin-top:4px;display:inline-flex;align-items:center;gap:4px">Docs →</span></div></div>`;
+      h+=`<div class="glass tool-card" onclick="showToolDetail('${n}')" style="padding:18px;display:flex;align-items:flex-start;gap:12px;cursor:pointer"><div class="tm-init">${n[0]}</div><div style="flex:1;min-width:0"><strong style="font-size:14px">${n}${s?' <span style="color:var(--accent2);font-size:11px">★</span>':''}</strong><p style="color:var(--text2);font-size:12px;margin-top:2px">${d}</p><span style="color:var(--accent);font-size:11px;opacity:.7;margin-top:4px;display:inline-flex;align-items:center;gap:4px">🗂️ Détails →</span></div></div>`;
     });
     h+='</div></div>';
   }
@@ -1382,6 +1444,601 @@ renderLessons();
 RL();
 setTimeout(()=>document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible')),100);
 console.log('🚀 QA Universe v2 bilingual (EN/FR) on recette');
+
+// ===== TOOL DETAIL DATA =====
+const TD={}; // 19 tools - see below
+
+// ---- Helper: register tool ----
+function regT(k,v){TD[k]=v}
+
+regT('Playwright',{url:'https://playwright.dev/docs/api/class-page',ico:'P',cat:'Automation Web',star:true,
+prereqs:['Node.js 18+ (recommandé 20 LTS)','npm 7+ ou yarn/pnpm','macOS 11+, Windows 10+, Ubuntu 20.04+'],
+install_mac:['npm init playwright@latest','npx playwright install --with-deps','Ou : brew install --cask playwright','ARM64 natif (Apple Silicon)'],
+install_windows:['npm init playwright@latest (PowerShell)','npx playwright install --with-deps','Ou : npm install -D @playwright/test','Windows 10/11, Chromium/Firefox/WebKit'],
+cli:[
+{c:'npx playwright test',d:'Exécute tous les tests'},
+{c:'npx playwright test --headed',d:'Mode visible (navigateur affiché)'},
+{c:'npx playwright test --debug',d:'Mode debug pas à pas'},
+{c:'npx playwright test --ui',d:'Interface graphique interactive'},
+{c:'npx playwright test --project=chromium',d:'Un seul navigateur'},
+{c:'npx playwright test --grep @smoke',d:'Filtre par tag'},
+{c:'npx playwright test --workers=4',d:'Parallélisation (4 workers)'},
+{c:'npx playwright test --retries=2',d:'2 tentatives en cas d\'échec'},
+{c:'npx playwright test --shard=1/3',d:'Shard CI (1/3)'},
+{c:'npx playwright test -c custom.config.ts',d:'Fichier config spécifique'},
+{c:'npx playwright show-report',d:'Ouvre le rapport HTML'},
+{c:'npx playwright show-trace trace.zip',d:'Ouvre le trace viewer'},
+{c:'npx playwright codegen example.com',d:'Générateur de code interactif'},
+{c:'npx playwright install [browser]',d:'Installe les navigateurs'},
+{c:'npx playwright install-deps',d:'Installe les dépendances système'},
+{c:'npx playwright clear-cache',d:'Vide le cache navigateur'}
+],
+api:[
+{c:'page.goto(url)',d:'Naviguer vers une URL'},
+{c:'page.click(selector)',d:'Cliquer sur un élément'},
+{c:'page.fill(selector, text)',d:'Remplir un champ'},
+{c:'page.locator(selector)',d:'Créer un locator'},
+{c:'getByRole(\'button\',{name:\'...\'})',d:'Locator par rôle ARIA'},
+{c:'getByText(\'Submit\')',d:'Locator par texte'},
+{c:'getByLabel(\'Email\')',d:'Locator par label associé'},
+{c:'getByPlaceholder(\'name@...\')',d:'Locator par placeholder'},
+{c:'getByTestId(\'login-btn\')',d:'Locator par data-testid'},
+{c:'expect(loc).toBeVisible()',d:'Assertion : visible'},
+{c:'expect(loc).toHaveText(\'...\')',d:'Assertion : texte exact'},
+{c:'expect(loc).toHaveValue(\'val\')',d:'Assertion : valeur input'},
+{c:'expect(page).toHaveURL(\'/path\')',d:'Assertion : URL exacte'},
+{c:'expect(page).toHaveTitle(\'...\')',d:'Assertion : titre page'},
+{c:'expect(loc).toHaveScreenshot()',d:'Assertion : snapshot visuel'},
+{c:'page.route(\'**/api/**\',fn)',d:'Intercepter/Mocker API'},
+{c:'page.keyboard.press(\'Enter\')',d:'Appuyer sur une touche'},
+{c:'page.screenshot({path:\'x.png\'})',d:'Capture d\'écran'},
+{c:'browser.newContext({storageState})',d:'Contexte avec auth'}
+],
+tips:['**Trace Viewer** : activez `trace: \'on\'` dans la config pour capturer chaque action. Visualisez avec `npx playwright show-trace trace.zip`.','**Mode UI** : `npx playwright test --ui` pour une interface interactive avec watch.','**Codegen** : `npx playwright codegen url` pour générer du code en naviguant.','**Web-First Assertions** : pas besoin de `waitFor` — les assertions retentent automatiquement.','**Projects** : configurez plusieurs navigateurs/viewports dans playwright.config.ts.','**Mocking** : `page.route()` pour intercepter, bloquer ou simuler les appels API.','**Authentification** : setup project → login → storageState → partagé entre tests.','**Parallélisation** : `--workers=N` par défaut. `--shard` pour CI multi-machine.'],
+faq:[
+{q:'Node requis ?',a:'Node.js 18+, 20 LTS recommandé.'},
+{q:'Installation Mac/Windows ?',a:'`npm init playwright@latest` puis `npx playwright install`. ARM64 natif sur Mac.'},
+{q:'@playwright/test vs playwright ?',a:'@playwright/test = test runner complet. playwright = bibliothèque (scripts, scraping).'},
+{q:'Un seul test ?',a:'`npx playwright test fichier.spec.ts` ou `fichier.spec.ts:42` (ligne).'},
+{q:'Safari supporté ?',a:'Oui via WebKit. Fonctionne sans Safari installé.'},
+{q:'Gratuit ?',a:'Oui. Open source Apache 2.0, maintenu par Microsoft.'},
+{q:'Mobile natif ?',a:'Émulation via viewport/device/userAgent. Pour natif : BrowserStack/SauceLabs.'}
+]});
+
+regT('Cypress',{url:'https://docs.cypress.io/api/table-of-contents',ico:'C',cat:'Automation Web',star:false,
+prereqs:['Node.js 18+ (Cypress 13+)','npm 7+, yarn ou pnpm','macOS 10.9+, Windows 7+ 64-bit, Ubuntu 20.04+'],
+install_mac:['npm install cypress --save-dev','npx cypress open (première config)','Natif ARM64 depuis Cypress 10','Ou : brew install --cask cypress'],
+install_windows:['npm install cypress --save-dev','npx cypress open','PowerShell recommandé','Exclure ~/AppData/Local/Cypress de l\'antivirus'],
+cli:[
+{c:'npx cypress open',d:'Ouvre le test runner interactif'},
+{c:'npx cypress run',d:'Exécute les tests en headless'},
+{c:'npx cypress run --headed',d:'Exécute avec navigateur visible'},
+{c:'npx cypress run --browser chrome',d:'Navigateur spécifique'},
+{c:'npx cypress run --spec "cypress/e2e/login.cy.js"',d:'Un seul fichier'},
+{c:'npx cypress run --config video=false',d:'Surcharge de config'},
+{c:'npx cypress run --env API_URL=http://localhost',d:'Variables d\'environnement'},
+{c:'npx cypress run --record --key <key>',d:'Enregistre sur Cypress Cloud'},
+{c:'npx cypress run --parallel',d:'Parallélisation (Cloud)'},
+{c:'npx cypress verify',d:'Vérifie l\'installation'},
+{c:'npx cypress cache list',d:'Liste les versions en cache'},
+{c:'npx cypress cache clear',d:'Vide le cache Cypress'},
+{c:'npx cypress install --force',d:'Force la réinstallation'}
+],
+api:[
+{c:'cy.visit(\'/path\')',d:'Naviguer vers une page'},
+{c:'cy.get(\'[data-test=btn]\')',d:'Sélectionner par CSS'},
+{c:'cy.contains(\'Submit\')',d:'Sélectionner par texte'},
+{c:'cy.get(\'@alias\')',d:'Utiliser un alias .as()'},
+{c:'cy.click()',d:'Cliquer sur un élément'},
+{c:'cy.type(\'text\',{delay:100})',d:'Taper du texte'},
+{c:'cy.clear()',d:'Effacer un champ'},
+{c:'cy.select(\'option\')',d:'Sélectionner une option'},
+{c:'cy.check() / cy.uncheck()',d:'Cocher/décocher checkbox'},
+{c:'cy.intercept(\'GET\',\'/api\',{}).as(\'req\')',d:'Intercepter/Mocker API'},
+{c:'cy.wait(\'@req\')',d:'Attendre une requête interceptée'},
+{c:'cy.fixture(\'data.json\')',d:'Charger un fichier fixture'},
+{c:'cy.screenshot(\'page\')',d:'Capture d\'écran'},
+{c:'cy.scrollIntoView()',d:'Défiler jusqu\'à l\'élément'},
+{c:'cy.get(\'h1\').should(\'be.visible\')',d:'Assertion Chai intégrée'},
+{c:'cy.task(\'seedDb\')',d:'Tâche personnalisée Node (plugins)'},
+{c:'cy.session(\'user\',()=>cy.login())',d:'Mettre en cache la session (Cypress 12+)'}
+],
+tips:['**cy.intercept()** : méthode moderne pour mocker les API. Combinez avec `cy.wait(\'@req\')`.','**Custom Commands** : `Cypress.Commands.add(\'login\', fn)` dans cypress/support/commands.js.','**data-testid** : préférez `[data-testid]` aux classes CSS ou XPath pour les sélecteurs fiables.','**cy.origin()** : `cy.origin(\'https://auth.com\', () => {...})` pour tests cross-origin (Cypress 12+).','**Component Testing** : `cy.mount(<Component/>)` pour tester des composants React/Vue/Angular.','**Évitez cy.wait(5000)** : préférez les assertions avec timeout intégré.'],
+faq:[
+{q:'Node requis ?',a:'Node 18+ pour Cypress 13+. Node 14+ pour versions 10-12.'},
+{q:'Installation Mac/Windows ?',a:'`npm install cypress --save-dev`. ARM64 natif depuis Cypress 10.'},
+{q:'cy.get() vs cy.contains() ?',a:'cy.get() = sélecteur CSS. cy.contains() = par texte. Préférez cy.get([data-testid]).'},
+{q:'Multi-navigateur ?',a:'Chrome, Edge, Firefox, Electron. PAS Safari.'},
+{q:'Gratuit ?',a:'Runner open source (MIT). Dashboard payant (tier gratuit limité).'},
+{q:'Un seul fichier ?',a:'`npx cypress run --spec "cypress/e2e/login.cy.js"`. Glob supporté.'}
+]});
+
+regT('Selenium',{url:'https://www.selenium.dev/documentation/webdriver/',ico:'S',cat:'Automation Web',star:false,
+prereqs:['Java 8+, Python 3.7+, Node 14+','Browser drivers (ChromeDriver, GeckoDriver, EdgeDriver)','Depuis Selenium 4.6+ : Selenium Manager auto-gère les drivers','Maven/Gradle pour Java, pip pour Python, npm pour JS'],
+install_mac:['Python : pip install selenium','Java (Maven) : ajouter selenium-java dans pom.xml','JS : npm install selenium-webdriver','brew install chromedriver (ou Selenium Manager auto)'],
+install_windows:['Python : pip install selenium','Java (Maven) : ajouter dépendance selenium-java','JS : npm install selenium-webdriver','Télécharger ChromeDriver depuis chromedriver.chromium.org'],
+cli:[],
+api:[
+{c:'driver = webdriver.Chrome()',d:'Initialiser Chrome WebDriver'},
+{c:'driver.get(\'https://x.com\')',d:'Naviguer vers une URL'},
+{c:'driver.find_element(By.ID,\'id\')',d:'Trouver par ID'},
+{c:'driver.find_element(By.CSS_SELECTOR,\'.cls\')',d:'Trouver par CSS'},
+{c:'driver.find_element(By.XPATH,\'//div\')',d:'Trouver par XPath'},
+{c:'element.click()',d:'Cliquer sur un élément'},
+{c:'element.send_keys(\'text\')',d:'Saisir du texte'},
+{c:'element.text',d:'Obtenir le texte'},
+{c:'element.get_attribute(\'href\')',d:'Obtenir un attribut'},
+{c:'WebDriverWait(driver,10).until(EC.presence_of_element_located((By.ID,\'id\')))',d:'Attente explicite'},
+{c:'Select(driver.find_element(By.ID,\'dd\')).select_by_value(\'val\')',d:'Sélectionner dans un menu déroulant'},
+{c:'ActionChains(driver).drag_and_drop(src,dst).perform()',d:'Glisser-déposer'},
+{c:'driver.execute_script(\'window.scrollTo(0,document.body.scrollHeight)\')',d:'Exécuter du JS'},
+{c:'driver.switch_to.window(handles[1])',d:'Changer de fenêtre/onglet'},
+{c:'driver.switch_to.frame(frame)',d:'Changer de frame'},
+{c:'driver.back() / driver.forward()',d:'Navigation arrière/avant'}
+],
+tips:['**WebDriverWait** > `time.sleep()` — les attentes conditionnelles sont plus rapides et fiables.','**Page Object Model** : pattern recommandé — chaque page = une classe avec ses éléments/méthodes.','**Mode headless** : `options.add_argument(\'--headless=new\')` pour Chrome.','**Selenium Manager** (4.6+) : plus besoin de gérer manuellement les drivers.','**Relative Locators** (Selenium 4) : `above()`, `below()`, `toLeftOf()`, `toRightOf()`.','**CDP (Chrome DevTools Protocol)** (Selenium 4) : interception réseau, performances.'],
+faq:[
+{q:'findElement vs findElements ?',a:'findElement retourne le 1er ou lève NoSuchElementException. findElements retourne une liste vide.'},
+{q:'StaleElementReferenceException ?',a:'L\'élément a été retiré du DOM. Re-trouvez-le avant d\'interagir.'},
+{q:'Selenium 4 vs 3 ?',a:'Selenium 4 : API W3C standard, Selenium Manager, Relative Locators, CDP natif.'},
+{q:'Headless ?',a:'`options.add_argument(\'--headless=new\')` pour Chrome (plus rapide que l\'ancien mode).'}
+]});
+
+regT('Postman',{url:'https://learning.postman.com/docs/getting-started/introduction/',ico:'P',cat:'API',star:false,
+prereqs:['Compte Postman gratuit','Node.js 16+ pour Newman (CLI)','npm install -g newman'],
+install_mac:['Télécharger depuis postman.com/downloads (DMG)','Ou : brew install --cask postman','Glisser dans Applications'],
+install_windows:['Télécharger depuis postman.com/downloads (.exe)','Exécuter l\'installeur','Ou : winget install Postman.Postman'],
+cli:[
+{c:'npm install -g newman',d:'Installer Newman CLI'},
+{c:'newman run collection.json',d:'Exécuter une collection'},
+{c:'newman run col.json -e env.json',d:'Avec environnement'},
+{c:'newman run col.json -d data.csv',d:'Data-driven testing'},
+{c:'newman run col.json -n 5',d:'5 itérations'},
+{c:'newman run col.json --reporters cli,json,htmlextra',d:'Générer des rapports'},
+{c:'newman run col.json --env-var "API_KEY=secret"',d:'Surcharger variables'},
+{c:'newman run col.json --timeout-request 10000',d:'Timeout 10s'}
+],
+api:[
+{c:'pm.test(\'name\', () => {...})',d:'Définir un test'},
+{c:'pm.response.to.have.status(200)',d:'Vérifier le code statut'},
+{c:'pm.response.json()',d:'Parser la réponse JSON'},
+{c:'pm.expect(val).to.equal(\'x\')',d:'Assertion (Chai.js)'},
+{c:'pm.environment.get(\'key\') / .set(\'key\',\'val\')',d:'Variables d\'environnement'},
+{c:'pm.globals.get/set(\'key\',\'val\')',d:'Variables globales'},
+{c:'pm.variables.get/set(\'key\',\'val\')',d:'Variables locales'},
+{c:'pm.collectionVariables.get/set',d:'Variables de collection'},
+{c:'pm.sendRequest(url, cb)',d:'Envoyer une requête depuis Pre-request/Tests'},
+{c:'pm.response.responseTime',d:'Temps de réponse (ms)'},
+{c:'pm.cookies.has(\'sess\') / get(\'sess\')',d:'Gérer les cookies'}
+],
+tips:['**Variables de collection** : pour les valeurs partagées entre requêtes (base URL, tokens).','**Pre-request scripts** : générez des tokens ou signatures dynamiques avant chaque requête.','**Newman en CI** : newman run avec --reporters junit pour intégration dans les pipelines.','**Versionnez les collections** : exportez en JSON et committez dans Git.'],
+faq:[
+{q:'Newman pour CI ?',a:'Oui : `npm install -g newman`, puis `newman run collection.json` dans votre pipeline.'},
+{q:'GraphQL supporté ?',a:'Oui. Méthode POST avec body type GraphQL.'},
+{q:'Gratuit ?',a:'Oui, version gratuite complète. Plans payants pour collaboration avancée.'}
+]});
+
+regT('Bruno',{url:'https://docs.usebruno.com/',ico:'B',cat:'API',star:true,
+prereqs:['Open-source, 100% local, aucun compte requis','Git pour versionner les collections (fichiers texte .bru)','Node.js 18+ pour le CLI'],
+install_mac:['Télécharger depuis usebruno.com/downloads (DMG)','Ou : brew install --cask bruno'],
+install_windows:['Télécharger depuis usebruno.com/downloads (.exe)','Ou : winget install Bruno.Bruno'],
+cli:[
+{c:'npm install -g @usebruno/cli',d:'Installer Bruno CLI'},
+{c:'bru run collection.bru',d:'Exécuter une collection'},
+{c:'bru run --env production',d:'Avec environnement spécifique'},
+{c:'bru run --sequential',d:'Exécution séquentielle'},
+{c:'bru run --output result.json',d:'Sauvegarder les résultats'},
+{c:'bru validate collection.bru',d:'Valider la collection'}
+],
+api:[
+{c:'req.get / req.post / req.put / req.delete',d:'Méthode HTTP dans .bru'},
+{c:'body { json { ... } }',d:'Corps JSON de la requête'},
+{c:'headers { Authorization: Bearer {{token}} }',d:'En-têtes avec variables'},
+{c:'assert { res.status: eq 200 }',d:'Assertion sur le statut'},
+{c:'assert { res.body.name: eq "John" }',d:'Assertion sur le body'},
+{c:'script:pre { ... } / script:post { ... }',d:'Scripts JS pré/post requête'},
+{c:'vars:pre { token: crypto.randomUUID() }',d:'Générer des variables'},
+{c:'env { ... }',d:'Définir un environnement'}
+],
+tips:['**Collections = fichiers bruts .bru** : versionnez-les dans Git pour la collaboration.','**100% offline** : pas de synchronisation cloud, pas de compte.','**Format ouvert** : chaque requête est un fichier texte modifiable manuellement.','**Migration Postman → Bruno** : File > Import > Postman Collection.'],
+faq:[
+{q:'Open-source ?',a:'Oui, MIT. Code sur GitHub.'},
+{q:'Migration depuis Postman ?',a:'Exportez vos collections Postman en JSON, importez dans Bruno.'},
+{q:'Version cloud ?',a:'Non, 100% local. Collaboration via Git.'}
+]});
+
+regT('REST Assured',{url:'https://github.com/rest-assured/rest-assured/wiki/Usage',ico:'R',cat:'API',star:false,
+prereqs:['Java 8+ (Java 11 recommandé)','Maven 3.6+ ou Gradle 7+','JUnit 4/5 ou TestNG'],
+install_mac:['Ajouter la dépendance Maven : io.rest-assured:rest-assured:5.4.0 (scope test)','Gradle : implementation \'io.rest-assured:rest-assured:5.4.0\''],
+install_windows:['Ajouter la dépendance dans pom.xml ou build.gradle','Assurez-vous que JAVA_HOME est configuré'],
+cli:[],
+api:[
+{c:'given().when().then()',d:'Syntaxe BDD given/when/then'},
+{c:'given().header(\'Authorization\',\'Bearer \'+t)',d:'Ajouter un header'},
+{c:'given().queryParam(\'page\',1)',d:'Paramètre de requête'},
+{c:'given().pathParam(\'id\',5)',d:'Paramètre de chemin'},
+{c:'given().body(myObject)',d:'Corps de la requête (sérialisation auto)'},
+{c:'given().contentType(ContentType.JSON)',d:'Content-Type'},
+{c:'when().get(\'/api/users\')',d:'Requête GET'},
+{c:'when().post(\'/api/users\')',d:'Requête POST'},
+{c:'then().statusCode(200)',d:'Vérifier le statut'},
+{c:'then().body(\'name\',equalTo(\'John\'))',d:'Vérifier une valeur JSON'},
+{c:'then().time(lessThan(2000L))',d:'Vérifier le temps de réponse'},
+{c:'then().extract().path(\'user.id\')',d:'Extraire une valeur'},
+{c:'given().auth().oauth2(token)',d:'Authentification OAuth2'},
+{c:'given().log().all()',d:'Logger la requête'},
+{c:'given().spec(requestSpec)',d:'Réutiliser une spec (DRY)'}
+],
+tips:['**RequestSpecBuilder** : centralisez les configurations communes (base URL, headers, auth).','**Hamcrest matchers** : `equalTo()`, `hasItems()`, `greaterThan()`, `notNullValue()`.','**JsonPath** : `response.jsonPath().getList(\'items.name\')` pour des extractions avancées.','**@BeforeClass** : initialisez une RequestSpecification partagée par tous les tests.'],
+faq:[
+{q:'Dépendance Maven ?',a:'`io.rest-assured:rest-assured:5.4.0` scope test.'},
+{q:'XML supporté ?',a:'Oui, avec des chemins XPath pour les assertions.'},
+{q:'Multipart/upload ?',a:'`given().multiPart(new File(\'file.pdf\'))`.'}
+]});
+
+regT('Appium',{url:'https://appium.io/docs/en/latest/',ico:'A',cat:'Mobile',star:false,
+prereqs:['Node.js 18+','Java JDK 11+ (Android)','Android Studio + SDK + ANDROID_HOME','macOS (pour iOS : Xcode 15+, CocoaPods)','Appium 2.x + drivers (uiautomator2, xcuitest)'],
+install_mac:['npm install -g appium','appium driver install uiautomator2','appium driver install xcuitest','Configurer ANDROID_HOME + JAVA_HOME dans ~/.zshrc'],
+install_windows:['npm install -g appium','appium driver install uiautomator2','Installer Android Studio + SDK','Configurer ANDROID_HOME + JAVA_HOME'],
+cli:[
+{c:'appium',d:'Démarrer le serveur Appium'},
+{c:'appium -p 4723',d:'Démarrer sur un port spécifique'},
+{c:'appium --log-level debug',d:'Mode debug'},
+{c:'appium --use-drivers uiautomator2',d:'Charger un driver spécifique'},
+{c:'appium driver install uiautomator2',d:'Installer un driver Android'},
+{c:'appium driver install xcuitest',d:'Installer un driver iOS'},
+{c:'appium driver list --installed',d:'Lister les drivers installés'},
+{c:'appium driver update --all',d:'Mettre à jour tous les drivers'}
+],
+api:[
+{c:'driver = webdriver.Remote(\'http://localhost:4723\', options)',d:'Initialiser la session'},
+{c:'driver.find_element(By.ACCESSIBILITY_ID, \'login\')',d:'Trouver par accessibility ID'},
+{c:'driver.find_element(By.ID, \'com.app:id/btn\')',d:'Trouver par ID ressource'},
+{c:'driver.find_element(By.XPATH, \'//*[@text=\"Login\"]\')',d:'Trouver par XPath'},
+{c:'element.click()',d:'Taper sur un élément'},
+{c:'element.send_keys(\'text\')',d:'Saisir du texte'},
+{c:'driver.swipe(x1,y1,x2,y2,800)',d:'Glisser (swipe)'},
+{c:'driver.tap([(x,y)],100)',d:'Taper à une position'},
+{c:'driver.press_keycode(4)',d:'Appuyer sur BACK (Android)'},
+{c:'driver.open_notifications()',d:'Ouvrir les notifications'},
+{c:'driver.lock(5)',d:'Verrouiller l\'écran'},
+{c:'driver.hide_keyboard()',d:'Masquer le clavier'},
+{c:'driver.switch_to.context(\'WEBVIEW\')',d:'Changer de contexte (WebView)'},
+{c:'driver.orientation = \'LANDSCAPE\'',d:'Changer l\'orientation'},
+{c:'driver.save_screenshot(\'screen.png\')',d:'Capture d\'écran'}
+],
+tips:['**Accessibility ID** : préférez `content-desc` ou `label` aux XPath (plus rapides et stables).','**Appium Inspector** : outil graphique pour inspecter visuellement les éléments mobiles.','**Appium 2.x** : drivers installés séparément — toujours `appium driver install` après l\'installation.','**ANDROID_HOME** : exportez dans ~/.zshrc — vérifiez avec `adb devices`.','**Désactivez les animations Android** pour des tests plus rapides et fiables.'],
+faq:[
+{q:'Appium 1.x vs 2.x ?',a:'Appium 2.x : architecture modulaire, drivers séparés, W3C WebDriver standard.'},
+{q:'Pourquoi ma session ne démarre pas ?',a:'Vérifiez : serveur lancé ? drivers installés ? ANDROID_HOME/JAVA_HOME configurés ?'},
+{q:'Tests iOS sans Mac ?',a:'Non, Xcode nécessite macOS. Cloud : BrowserStack, SauceLabs.'},
+{q:'Mode headless ?',a:'Pas de mode headless intégré. Pour Android : émulateur avec -no-window.'}
+]});
+
+regT('Detox',{url:'https://wix.github.io/Detox/docs/api/overview',ico:'D',cat:'Mobile',star:false,
+prereqs:['React Native 0.72+','Node.js 18+','iOS : macOS + Xcode 15+ + CocoaPods','Android : Android Studio + SDK + Gradle 8+ + JDK 11+'],
+install_mac:['npm install --save-dev detox','detox init -r jest','cd ios && pod install'],
+install_windows:['npm install --save-dev detox','detox init -r jest','Configurer ANDROID_HOME'],
+cli:[
+{c:'detox build --configuration ios.sim.debug',d:'Compiler pour iOS Simulator'},
+{c:'detox build --configuration android.emu.debug',d:'Compiler pour Android Emulator'},
+{c:'detox test --configuration ios.sim.debug',d:'Exécuter les tests iOS'},
+{c:'detox test --configuration android.emu.debug',d:'Exécuter les tests Android'},
+{c:'detox test --workers 4',d:'Parallélisation (4 workers)'},
+{c:'detox test --take-screenshots all',d:'Captures d\'écran à chaque test'},
+{c:'detox test --reuse',d:'Réutiliser le build sans rebuild'},
+{c:'detox test --loglevel trace',d:'Logs détaillés pour déboguer'}
+],
+api:[
+{c:'by.id(\'myButton\')',d:'Locator par testID'},
+{c:'by.text(\'Submit\')',d:'Locator par texte visible'},
+{c:'by.label(\'LoginButton\')',d:'Locator par accessibilityLabel'},
+{c:'element(by.id(\'btn\')).tap()',d:'Taper sur un élément'},
+{c:'element(by.id(\'input\')).typeText(\'hello\')',d:'Taper du texte'},
+{c:'element(by.id(\'input\')).clearText()',d:'Effacer le texte'},
+{c:'element(by.id(\'list\')).scroll(50,\'down\')',d:'Défiler'},
+{c:'element(by.id(\'el\')).swipe(\'left\')',d:'Swiper'},
+{c:'expect(element(by.id(\'btn\'))).toBeVisible()',d:'Vérifier la visibilité'},
+{c:'expect(element(by.id(\'input\'))).toHaveText(\'hello\')',d:'Vérifier le texte'},
+{c:'waitFor(element(by.id(\'btn\'))).toBeVisible().withTimeout(5000)',d:'Attente conditionnelle'},
+{c:'device.reloadReactNative()',d:'Recharger l\'app RN'},
+{c:'device.pressBack()',d:'Bouton Back (Android)'},
+{c:'device.setLocation(48.8566,2.3522)',d:'Simuler une position GPS'}
+],
+tips:['**testID** : toujours utiliser `testID` sur les composants React Native — c\'est le sélecteur le plus fiable.','**Évitez sleep()** : préférez `waitFor().toBeVisible().withTimeout()` pour les animations.','**Configurations séparées** : iOS Simulator et Android Emulator dans .detoxrc.js.','**beforeEach** : `await device.reloadReactNative()` pour repartir de zéro entre les tests.'],
+faq:[
+{q:'Prérequis iOS ?',a:'macOS + Xcode + CocoaPods + Simulator configuré.'},
+{q:'Prérequis Android ?',a:'Android Studio + SDK + AVD + JDK 11+ + ANDROID_HOME.'},
+{q:'Non-React Native ?',a:'Non, Detox est spécifique React Native.'}
+]});
+
+regT('k6',{url:'https://k6.io/docs/',ico:'k',cat:'Perf',star:true,
+prereqs:['Aucune dépendance — binaire statique Go','macOS 10.15+, Windows 10+, Linux','Pas de Node.js requis'],
+install_mac:['brew install k6','Ou : télécharger le binaire depuis GitHub Releases'],
+install_windows:['choco install k6','Ou : scoop install k6','Ou : winget install k6','Ou : télécharger le binaire .zip depuis GitHub'],
+cli:[
+{c:'k6 run script.js',d:'Exécuter un script de test'},
+{c:'k6 run --vus 10 --duration 30s script.js',d:'10 VUs pendant 30s'},
+{c:'k6 run --iterations 100 script.js',d:'100 itérations totales'},
+{c:'k6 run --out json=report.json',d:'Exporter les résultats'},
+{c:'k6 run --out influxdb=http://localhost:8086/k6',d:'Exporter vers InfluxDB'},
+{c:'k6 login cloud',d:'Authentifier Grafana Cloud'},
+{c:'k6 cloud script.js',d:'Exécuter sur Grafana Cloud'},
+{c:'k6 archive script.js',d:'Archiver script + dépendances'},
+{c:'k6 inspect script.js',d:'Inspecter les options du script'},
+{c:'docker run --rm -v $(pwd):/scripts grafana/k6 run /scripts/script.js',d:'Exécuter via Docker'}
+],
+api:[
+{c:'import http from \'k6/http\'',d:'Importer le module HTTP'},
+{c:'import { check, sleep } from \'k6\'',d:'Importer check et sleep'},
+{c:'http.get(url)',d:'Requête GET'},
+{c:'http.post(url, body, params)',d:'Requête POST'},
+{c:'http.batch([req1, req2])',d:'Requêtes parallèles'},
+{c:'check(res, { \'status 200\': (r) => r.status===200 })',d:'Valider des conditions'},
+{c:'sleep(1)',d:'Pause (think time)'},
+{c:'group(\'Login\', () => {...})',d:'Grouper des actions'},
+{c:'export const options = { vus:10, duration:\'30s\' }',d:'Options de test'},
+{c:'export const options = { thresholds: { http_req_duration: [\'p(95)<500\'] } }',d:'Seuils de performance'}
+],
+tips:['**Toujours ajouter sleep()** : simule le temps de réflexion utilisateur pour des tests réalistes.','**Ramping-VUs** : préférez `ramping-vus` à `constant-vus` pour des patterns de charge réalistes.','**Thresholds first** : définissez les critères de succès avant d\'écrire le script (TDD performance).','**http.batch()** : pour des requêtes parallèles indépendantes (économie de temps).','**k6 browser** (v0.52+) : testez avec un vrai navigateur Chromium.'],
+faq:[
+{q:'Nécessite Node.js ?',a:'Non. Goja (runtime JS en Go) est embarqué dans le binaire.'},
+{q:'Check vs Threshold ?',a:'check = validation par requête (ne stoppe pas). threshold = critère global (exit code 99 si violé).'},
+{q:'Test distribué ?',a:'Localement mono-process. Cloud : k6 Cloud ou k6 Operator Kubernetes.'}
+]});
+
+regT('JMeter',{url:'https://jmeter.apache.org/usermanual/',ico:'J',cat:'Perf',star:false,
+prereqs:['Java 8 minimum (Java 17+ recommandé)','2 Go RAM mini (8 Go+ pour tests lourds)','~300 Mo disque'],
+install_mac:['brew install jmeter','Ou : télécharger apache-jmeter-5.6.3.zip depuis jmeter.apache.org'],
+install_windows:['Télécharger apache-jmeter-5.6.3.zip','Extraire dans C:\\JMeter, ajouter bin au PATH','Ou : choco install jmeter'],
+cli:[
+{c:'jmeter',d:'Lancer l\'interface graphique (création de plans)'},
+{c:'jmeter -n -t plan.jmx -l results.jtl',d:'Exécuter en mode non-GUI (headless)'},
+{c:'jmeter -n -t plan.jmx -e -o ./report',d:'Exécuter + générer rapport HTML'},
+{c:'jmeter -g results.jtl -o ./report',d:'Générer rapport à partir d\'un fichier JTL existant'},
+{c:'jmeter -n -t plan.jmx -R slave1,slave2',d:'Mode distribué'}
+],
+api:[
+{c:'Thread Group',d:'Groupe d\'utilisateurs virtuels (threads)'},
+{c:'HTTP Request (Sampler)',d:'Requête HTTP GET/POST/PUT/DELETE'},
+{c:'Response Assertion',d:'Vérifier le code/body de la réponse'},
+{c:'Duration Assertion',d:'Vérifier le temps de réponse max'},
+{c:'CSV Data Set Config',d:'Data-driven testing depuis un CSV'},
+{c:'Constant Timer / Uniform Random Timer',d:'Pause entre les requêtes'},
+{c:'Synchronizing Timer',d:'Lancer N threads simultanément'},
+{c:'Summary Report / Aggregate Report',d:'Statistiques et percentiles'},
+{c:'View Results Tree',d:'Débogage (NE PAS utiliser en test de charge)'},
+{c:'Simple Data Writer',d:'Écriture fichier basse consommation (recommandé)'},
+{c:'Backend Listener (InfluxDB)',d:'Monitoring temps réel Grafana'}
+],
+tips:['**Toujours en non-GUI** pour les vrais tests : `jmeter -n -t`. Le GUI consomme trop de mémoire.','**Augmentez HEAP** : `HEAP=\'-Xms2g -Xmx8g\'` dans le script jmeter.','**Désactivez les listeners graphiques** pendant les tests (sauf Simple Data Writer).','**Plugins Manager** : installez-le dans lib/ext/ puis ajoutez Custom Thread Groups, Throughput Shaping Timer.','**Rapport HTML** : `-e -o ./report` pendant le run ou après avec `jmeter -g results.jtl -o ./report`.'],
+faq:[
+{q:'Quelle version de Java ?',a:'Java 8 minimum. Java 17+ recommandé.'},
+{q:'GUI vs non-GUI ?',a:'GUI = création de plans uniquement. Non-GUI (`jmeter -n -t`) pour les vrais tests de charge.'},
+{q:'Test distribué ?',a:'Oui : slaves (jmeter-server) + master (-R ip1,ip2). Même version partout.'},
+{q:'Comment générer un rapport HTML ?',a:'Pendant : `-e -o ./report`. Après : `jmeter -g results.jtl -o ./report`.'}
+]});
+
+regT('Gatling',{url:'https://gatling.io/docs/gatling/reference/current/',ico:'G',cat:'Perf',star:false,
+prereqs:['Java 11+ (Java 17 recommandé)','Maven 3.6+ ou Gradle 7+','Ou bundle Gatling (zip avec scripts)'],
+install_mac:['Télécharger Gatling bundle depuis gatling.io','Ou via Maven : ajouter gatling-maven-plugin','Ou : brew install gatling'],
+install_windows:['Télécharger Gatling bundle (zip) depuis gatling.io','Extraire et lancer gatling.sh/bat','Ou via Maven/Gradle dans un projet'],
+cli:[],
+api:[
+{c:'import io.gatling.javaapi.core.*',d:'Importer l\'API Java'},
+{c:'class MySimulation extends Simulation',d:'Définir une simulation'},
+{c:'ScenarioBuilder scn = scenario(\'MyTest\')',d:'Créer un scénario'},
+{c:'scn.exec(http(\'request\').get(\'/api\'))',d:'Ajouter une requête HTTP'},
+{c:'scn.exec(session -> { ... return session; })',d:'Exécuter du code personnalisé'},
+{c:'setUp(scn.injectOpen(rampUsers(10).during(10)))',d:'Injecter des utilisateurs progressivement'},
+{c:'setUp(scn.injectOpen(constantUsersPerSec(5).during(60)))',d:'5 req/s pendant 60s'},
+{c:'assertions.forAll().responseTime().mean().lt(500)',d:'Assertions de performance'}
+],
+tips:['**Rapports HTML** : Gatling génère automatiquement des rapports visuels riches après chaque test.','**Scénarios réalistes** : utilisez `pause()` pour simuler le temps de réflexion.','**Feeders** : CSV, JSON, JDBC pour le data-driven testing.'],
+faq:[
+{q:'Java requis ?',a:'Java 11+. Scala optionnel (API Java disponible depuis Gatling 3.7+).'},
+{q:'Rapports ?',a:'HTML riches générés automatiquement dans results/.'}
+]});
+
+regT('Burp Suite',{url:'https://portswigger.net/burp/documentation',ico:'B',cat:'Security',star:false,
+prereqs:['Java 17+ (Burp Suite 2023+)','Édition Community (gratuite) ou Professional (payante)'],
+install_mac:['Télécharger depuis portswigger.net','Ou : brew install --cask burp-suite'],
+install_windows:['Télécharger l\'installeur depuis portswigger.net','Exécuter l\'installeur .exe'],
+cli:[],
+api:[],
+tips:['**Proxy** : configurez votre navigateur sur 127.0.0.1:8080 avec le certificat CA Burp.','**Repeater** : modifiez et renvoyez des requêtes individuellement pour tester des payloads.','**Intruder** : attaques par dictionnaire (brute-force, fuzzing) — 4 types : Sniper, Battering ram, Pitchfork, Cluster bomb.','**Scanner (Pro)** : scanne automatiquement les vulnérabilités (XSS, SQLi, etc.).'],
+faq:[
+{q:'Gratuit ?',a:'Community : gratuite (Proxy, Repeater, Intruder limité). Pro : payante (Scanner, outils avancés).'},
+{q:'Installation Java ?',a:'Java 17+ requis. Le bundle inclut sa propre JVM.'}
+]});
+
+regT('OWASP ZAP',{url:'https://www.zaproxy.org/docs/',ico:'Z',cat:'Security',star:false,
+prereqs:['Java 11+','Outil open-source de test d\'intrusion web'],
+install_mac:['brew install --cask zap','Ou télécharger depuis zaproxy.org/download'],
+install_windows:['Télécharger l\'installeur depuis zaproxy.org','Ou : choco install zap'],
+cli:[
+{c:'zap.sh -daemon',d:'Démarrer en mode démon'},
+{c:'zap.sh -cmd -quickurl https://example.com',d:'Quick scan automatisé'},
+{c:'zap-api-scan.py -t https://api.example.com/openapi.json',d:'Scan API (OpenAPI)'},
+{c:'zap-full-scan.py -t https://example.com',d:'Scan complet'}
+],
+api:[],
+tips:['**Mode démon** : idéal pour CI/CD — `zap.sh -daemon` puis API REST.','**ZAP API** : API REST complète pour automatiser les scans (POST /JSON/ascan/action/scan/).','**Contextes** : définissez des contextes (URLs, auth, contraintes) pour des scans ciblés.'],
+faq:[
+{q:'Open-source ?',a:'Oui, maintenu par OWASP. Gratuit et complet.'},
+{q:'ZAP vs Burp ?',a:'ZAP : open-source, idéal CI/CD, moins d\'outils manuels. Burp : plus complet pour l\'analyse manuelle, Pro payante.'}
+]});
+
+regT('TestRail',{url:'https://support.testrail.com/',ico:'T',cat:'Mgmt',star:false,
+prereqs:['Navigateur web moderne','Compte TestRail (cloud ou self-hosted)'],
+install_mac:['Aucune installation — TestRail est une application web'],
+install_windows:['Aucune installation — TestRail est une application web'],
+cli:[
+{c:'API REST : GET /index.php?/api/v2/get_cases/{project_id}',d:'Récupérer les cas de test'},
+{c:'API REST : POST /index.php?/api/v2/add_result/{run_id}',d:'Ajouter un résultat'},
+{c:'API REST : POST /index.php?/api/v2/add_run/{project_id}',d:'Créer un test run'}
+],
+api:[],
+tips:['**API REST** : automatisez la création de runs et l\'ajout de résultats depuis vos tests.','**Intégrations** : Jira, GitLab, GitHub, Jenkins, Slack.','**Rapports** : tableaux de bord de progression et graphiques de tendance.'],
+faq:[
+{q:'Cloud ou on-premise ?',a:'Les deux. Cloud (SaaS) ou serveur dédié.'},
+{q:'API ?',a:'API REST complète pour l\'automatisation.'}
+]});
+
+regT('qTest',{url:'https://support.qtest.com/',ico:'q',cat:'Mgmt',star:false,
+prereqs:['Navigateur web moderne','Compte qTest (cloud)','Tricentis qTest'],
+install_mac:['Application web — aucune installation requise'],
+install_windows:['Application web — aucune installation requise'],
+cli:[],
+api:[],
+tips:['**Paramètres** : définit les paramètres de test pour un test paramétré.','**qTest Manager** : gestion des cas de test, cycles d\'exécution, rapports.']
+});
+
+regT('Xray',{url:'https://docs.getxray.app/',ico:'X',cat:'Mgmt',star:false,
+prereqs:['Jira (Cloud ou Data Center)','Licence Xray (payante après essai)'],
+install_mac:['Application web intégrée à Jira — installer depuis Atlassian Marketplace'],
+install_windows:['Application web intégrée à Jira — installer depuis Atlassian Marketplace'],
+cli:[
+{c:'API REST : POST /rest/raven/1.0/import/execution/cucumber',d:'Importer des résultats Cucumber'},
+{c:'API REST : POST /rest/raven/1.0/import/execution/junit',d:'Importer des résultats JUnit'},
+{c:'API REST : GET /rest/raven/1.0/api/test',d:'Récupérer les tests'}
+],
+api:[],
+tips:['**Import automatique** : Cucumber, JUnit, TestNG, NUnit, Robot Framework depuis CI/CD.','**Traçabilité** : lien direct entre exigences, tests, exécutions et bugs Jira.'],
+faq:[
+{q:'Plugin Jira ?',a:'Oui, installé via Atlassian Marketplace.'},
+{q:'Import de tests ?',a:'API REST pour Cucumber, JUnit, TestNG, NUnit.'}
+]});
+
+regT('Applitools',{url:'https://applitools.com/docs/',ico:'A',cat:'Visual',star:true,
+prereqs:['Compte Applitools Eyes (gratuit tier limité)','SDK pour Selenium, Cypress, Playwright, ou autres'],
+install_mac:['npm install @applitools/eyes-cypress (pour Cypress)','npm install @applitools/eyes-playwright (pour Playwright)','npm install @applitools/eyes-selenium (pour Selenium)'],
+install_windows:['Mêmes commandes npm — Applitools est une bibliothèque'],
+cli:[],
+api:[
+{c:'eyes.open(driver, appName, testName)',d:'Ouvrir un test visuel'},
+{c:'eyes.check(\'login page\', Target.window().fully())',d:'Capturer la page entière'},
+{c:'eyes.check(\'element\', Target.region(\'#header\'))',d:'Capturer une région spécifique'},
+{c:'eyes.check(\'element\', Target.frame(\'content\'))',d:'Capturer un iframe'},
+{c:'eyes.close()',d:'Fermer et comparer'},
+{c:'eyes.closeAsync()',d:'Fermer sans attendre le résultat'}
+],
+tips:['**UltraFast Grid** : exécutez les tests visuels en parallèle sur 40+ combinaisons navigateur/viewport/OS.','**Before/After snapshots** : utilisez `eyes.check()` avant et après une action pour détecter les régressions visuelles.','**Branches et Bâle** : intégration avec Git : comparez les changements visuels entre branches.'],
+faq:[
+{q:'Gratuit ?',a:'Oui, tier gratuit (checkpoints limités). Plans payants pour équipes.'},
+{q:'Frameworks supportés ?',a:'Selenium, Cypress, Playwright, Appium, WebDriverIO, Nightwatch, Storybook, et autres.'}
+]});
+
+regT('Percy',{url:'https://percy.io/docs',ico:'P',cat:'Visual',star:false,
+prereqs:['Compte Percy (BrowserStack)','SDK per spécifique framework (cypress/percy, percy/playwright, etc.)'],
+install_mac:['npm install @percy/cli --save-dev','npm install @percy/cypress --save-dev','percy exec -- cypress run'],
+install_windows:['Mêmes commandes npm — Percy est une bibliothèque JS'],
+cli:[
+{c:'percy exec -- cypress run',d:'Exécuter les tests Cypress avec Percy'},
+{c:'percy exec -- npx playwright test',d:'Exécuter les tests Playwright avec Percy'},
+{c:'percy snapshot snapshots/',d:'Snapshot des dossiers d\'images'},
+{c:'percy upload snapshots/',d:'Upload des snapshots vers Percy'}
+],
+api:[],
+tips:['**CI/CD** : `percy exec` encapsule votre commande de test et upload automatiquement les snapshots.','**Storybook** : Percy s\'intègre nativement avec Storybook pour le visual testing des composants.'],
+faq:[
+{q:'BrowserStack ?',a:'Oui, Percy fait partie de BrowserStack depuis l\'acquisition.'},
+{q:'Différence Applitools vs Percy ?',a:'Applitools = AI visual testing (ultraFast Grid). Percy = visual review simple avec CI/CD intégré.'}
+]});
+
+regT('Chromatic',{url:'https://www.chromatic.com/docs/',ico:'C',cat:'Visual',star:false,
+prereqs:['Compte Chromatic','Projet Storybook (React, Vue, Angular)','npm install chromatic'],
+install_mac:['npx chromatic --project-token=<token>','Intégré dans le processus CI/CD'],
+install_windows:['Mêmes commandes npx — Chromatic est un outil cloud'],
+cli:[
+{c:'npx chromatic --project-token=<token>',d:'Publier Storybook et lancer les tests visuels'},
+{c:'npx chromatic --project-token=<token> --build-script-name=build-storybook',d:'Build personnalisé Storybook'},
+{c:'npx chromatic --project-token=<token> --only-changed',d:'Tester uniquement les stories modifiées'},
+{c:'npx chromatic --project-token=<token> --exit-zero-on-errors',d:'Ne pas échouer sur les erreurs'}
+],
+api:[],
+tips:['**Storybook-first** : Chromatic est le meilleur outil de visual testing pour les projets Storybook.','**Builds par branche** : chaque branche Git a son propre build Chromatic — comparez visuellement.','**UI Review** : les designers peuvent commenter et approuver les changements visuels directement.'],
+faq:[
+{q:'Storybook requis ?',a:'Oui, Chromatic est conçu spécifiquement pour Storybook.'},
+{q:'Gratuit ?',a:'Oui, tier gratuit (builds limités par mois).'}
+]});
+
+// ===== TOOL DETAIL FUNCTIONS =====
+function showToolDetail(name){
+  const t=TD[name]; if(!t)return;
+  document.getElementById('tmIcon').textContent=t.ico||name[0];
+  document.getElementById('tmName').textContent=name+(t.star?' ★':'');
+  document.getElementById('tmDocsBtn').href=t.url;
+  
+  // Build content
+  const body=document.getElementById('tmBody');
+  let sections={};
+  
+  // Helper functions
+  const L=(arr)=>arr?arr.map(function(i){return '<li>'+i.replace(/\`([^\`]+)\`/g,'<code>$1</code>')+'</li>';}).join(''):'';
+  const CL=(arr)=>arr?'<table class="tm-cmd-tbl"><tr><th>Commande</th><th>Description</th></tr>'+arr.map(function(x){return '<tr><td>'+(x.c||x.cmd||'')+'</td><td>'+(x.d||x.desc||'')+'</td></tr>';}).join('')+'</table>':'';
+  
+  // Prereqs
+  if(t.prereqs&&t.prereqs.length)
+    sections.prereqs=`<div class="tm-title">📋 Prérequis</div><ul class="tm-list">${L(t.prereqs)}</ul>`;
+  
+  // Install
+  if(t.install_mac||t.install_windows){
+    let ih='<div class="tm-title">💻 Installation</div>';
+    if(t.install_mac)ih+=`<div style="font-size:13px;color:var(--accent2);margin:4px 0 2px">🍎 macOS</div><ul class="tm-list">${L(t.install_mac)}</ul>`;
+    if(t.install_windows)ih+=`<div style="font-size:13px;color:var(--accent3);margin:12px 0 2px">🪟 Windows</div><ul class="tm-list">${L(t.install_windows)}</ul>`;
+    sections.install=ih;
+  }
+  
+  // CLI commands
+  if(t.cli&&t.cli.length)
+    sections.cli=`<div class="tm-title">⌨️ Commandes CLI</div>${CL(t.cli)}`;
+  
+  // API commands
+  if(t.api&&t.api.length)
+    sections.api=`<div class="tm-title">🔧 Commandes API</div>${CL(t.api)}`;
+  
+  // Tips
+  if(t.tips&&t.tips.length)
+    sections.tips=`<div class="tm-title">💡 Tips & Best Practices</div>${t.tips.map(tp=>`<div class="tm-tip">${tp}</div>`).join('')}`;
+  
+  // FAQ
+  if(t.faq&&t.faq.length)
+    sections.faq=`<div class="tm-title">❓ FAQ</div>${t.faq.map(f=>`<div class="tm-faq"><div class="tm-fq" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('show')">${f.q}</div><div class="tm-fa">${f.a}</div></div>`).join('')}`;
+  
+  // Render all sections
+  let html='';
+  const tabOrder=['prereqs','install','cli','api','tips','faq'];
+  for(const id of tabOrder){
+    if(sections[id]){
+      html+=`<div class="tool-modal-sec${id==='prereqs'?' active':''}" id="tmSec-${id}">${sections[id]}</div>`;
+    }
+  }
+  body.innerHTML=html||'<p style="color:var(--muted)">Aucune donnée disponible pour cet outil.</p>';
+  
+  // Reset tabs
+  document.querySelectorAll('.tool-modal-tab').forEach(tb=>tb.classList.toggle('active',tb.dataset.tab==='prereqs'));
+  
+  // Show overlay
+  document.getElementById('toolOverlay').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+
+function closeToolDetail(){
+  document.getElementById('toolOverlay').classList.remove('show');
+  document.body.style.overflow='';
+}
+
+// Tab switching for tool modal
+document.querySelectorAll('.tool-modal-tab').forEach(tab=>{
+  tab.addEventListener('click',function(){
+    document.querySelectorAll('.tool-modal-tab').forEach(t=>t.classList.remove('active'));
+    this.classList.add('active');
+    document.querySelectorAll('.tool-modal-sec').forEach(s=>s.classList.remove('active'));
+    const sec=document.getElementById('tmSec-'+this.dataset.tab);
+    if(sec)sec.classList.add('active');
+  });
+});
 </script>
 </body>
 </html>
