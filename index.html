@@ -3100,7 +3100,7 @@ h5 { font-size: 1rem; }
         <input type="checkbox" id="themeSwitch" class="theme-switch-input" />
         <span class="theme-slider"></span>
       </label>
-      <button class="nav-action-btn lang-toggle" id="langToggle" onclick="toggleLanguage()" aria-label="Toggle language" data-i18n="nav.language">🇫🇷</button>
+      <button class="nav-action-btn lang-toggle" id="langToggle" aria-label="Toggle language" data-i18n="nav.language">🇫🇷</button>
       <!-- Hamburger (Mobile) -->
       <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileNav()" aria-label="Menu">
         <span class="hamburger-line"></span>
@@ -5459,6 +5459,7 @@ const I18N = {
 
 // ====== STATE ======
 let currentLang = localStorage.getItem('qaU2_lang') || 'fr';
+let LANG = currentLang; // alias for legacy functions (renderNews, switchLang, etc.)
 let currentTab = 'tab-news';
 let currentToolCategory = 'all';
 let currentToolPage = 1;
@@ -7674,17 +7675,15 @@ function renderProgress(){
 
 // ===== LANGUAGE SWITCH =====
 function switchLang(){
-  LANG = LANG === 'fr' ? 'en' : 'fr';
-  localStorage.setItem('qaU2_lang', LANG);
-  document.documentElement.lang = LANG;
-  document.getElementById('langFlag').textContent = LANG === 'fr' ? '🇫🇷' : '🇬🇧';
-  document.getElementById('langLabel').textContent = LANG === 'fr' ? ' FR' : ' EN';
+  currentLang = currentLang === 'fr' ? 'en' : 'fr';
+  LANG = currentLang;
+  setLang(currentLang);
   
   // Re-render everything
   RL(); // Update data-i18n DOM elements
   renderTicker();
   renderDash();
-  initNews();
+  renderNews();
   renderTools();
   renderTrain();
   renderLessons();
