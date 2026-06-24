@@ -1039,9 +1039,21 @@ h5 { font-size: 1rem; }
 .news-source-opt{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:4px;cursor:pointer;font-size:12px;color:var(--text2);transition:all .1s}
 .news-source-opt:hover{background:var(--surface2);color:var(--text)}
 .news-source-opt input[type=checkbox]{accent-color:var(--accent)}
-.news-source-clear{margin-top:8px;text-align:right}
-.news-source-clear button{background:none;border:none;color:var(--accent);font-size:11px;cursor:pointer;font-family:var(--font-body)}
+/* Source filter items (dynamic) */
+.news-source-items{display:flex;flex-direction:column;gap:2px;margin-bottom:8px}
+.source-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:12px;color:var(--text2);transition:all .1s}
+.source-item:hover{background:var(--surface2);color:var(--text)}
+.source-item .source-checkbox{accent-color:var(--accent);width:14px;height:14px}
+.source-item .source-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.source-item .source-count{font-size:10px;color:var(--muted);background:var(--surface2);padding:1px 6px;border-radius:999px;min-width:18px;text-align:center}
+.news-source-clear{text-align:right;padding-top:4px;border-top:1px solid var(--border)}
+.news-source-clear button{background:none;border:none;color:var(--accent);font-size:11px;cursor:pointer;padding:2px 6px}
 .news-source-clear button:hover{text-decoration:underline}
+/* Reader button */
+.reader-btn{font-size:18px;padding:4px 8px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;border:none;background:transparent;color:var(--text2);cursor:pointer;transition:all .15s}
+.reader-btn:hover{background:var(--surface2);color:var(--accent);transform:scale(1.1)}
+.reader-btn.active{color:var(--accent);background:rgba(0,229,200,.1);animation:pulse-reader 1.5s ease-in-out infinite}
+@keyframes pulse-reader{0%,100%{opacity:1}50%{opacity:.6}}
 .news-hero-card{position:relative;width:100%;min-height:280px;border-radius:var(--radius);overflow:hidden;cursor:pointer;background:var(--surface);border:1px solid var(--border);margin-bottom:20px;transition:all .3s ease}
 .news-hero-card:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,229,200,.15);border-color:var(--accent)}
 .news-hero-card .hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .4s ease}
@@ -3225,7 +3237,8 @@ h5 { font-size: 1rem; }
         <input type="checkbox" id="themeSwitch" class="theme-switch-input" />
         <span class="theme-slider"></span>
       </label>
-      <button class="nav-action-btn lang-toggle" id="langToggle" aria-label="Toggle language" data-i18n="nav.language">🇫🇷</button>
+      <button class="nav-action-btn lang-toggle" id="langToggle" aria-label="Toggle language">🇫🇷</button>
+      <button class="nav-action-btn reader-btn" id="readerBtn" aria-label="Read aloud" title="Options Reader">🔊</button>
       <!-- Hamburger (Mobile) -->
       <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileNav()" aria-label="Menu">
         <span class="hamburger-line"></span>
@@ -3279,7 +3292,7 @@ h5 { font-size: 1rem; }
     </div>
   </div>
   <div class="news-source-dropdown" id="newsSourceDropdown">
-    <div class="news-source-clear"><button id="newsSourceClear">Clear selection</button></div>
+    <!-- Populated dynamically by populateSources() -->
   </div>
   <div id="newsGrid"></div>
 </section>
@@ -5478,7 +5491,17 @@ const I18N = {
     labs_daily: 'Défi',
     labs_assess: 'Évaluation',
     labs_gen: 'Générateur',
-    labs_templates: 'Templates',
+    reports_title: 'Rapports',
+    // Nav dot-notation aliases
+    nav_language: 'Langue',
+    common_notifications: 'Notifications',
+    nav_dashboard: 'Dashboard',
+    nav_istqb_prep: 'Prépa ISTQB',
+    // News page
+    news_title: 'Actualités IA & QA',
+    news_sub: 'Toute l\'actualité QA, IA Testing et certifications.',
+    // ISTQB subtitle
+    istqb_subtitle: 'CTFL v4.0 · CT-AI v2.0 · CT-GenAI v1.1',
   },
   en: {
     app_title: 'QA Universe',
@@ -5579,6 +5602,17 @@ const I18N = {
     labs_assess: 'Assessment',
     labs_gen: 'Generator',
     labs_templates: 'Templates',
+    reports_title: 'Reports',
+    // Nav dot-notation aliases
+    nav_language: 'Language',
+    common_notifications: 'Notifications',
+    nav_dashboard: 'Dashboard',
+    nav_istqb_prep: 'ISTQB Prep',
+    // News page
+    news_title: 'AI & QA News',
+    news_sub: 'All the latest QA, AI Testing, and certification news.',
+    // ISTQB subtitle
+    istqb_subtitle: 'CTFL v4.0 · CT-AI v2.0 · CT-GenAI v1.1',
   }
 };
 
@@ -5606,22 +5640,56 @@ let filteredTools = [...TOOLS_DATA];
 
 // ====== UTILITY FUNCTIONS ======
 function T(key) {
-  return I18N[currentLang] && I18N[currentLang][key] !== undefined ? I18N[currentLang][key] : key;
+  if (typeof key !== 'string' || !key) return key;
+  // Try exact key first, then dot→underscore, then strip namespace prefix
+  const langs = I18N[currentLang];
+  if (langs && langs[key] !== undefined) return langs[key];
+  const dotNorm = key.replace(/\./g, '_');
+  if (langs && langs[dotNorm] !== undefined) return langs[dotNorm];
+  // Strip first namespace segment: 'nav.news' → 'nav_news', 'dashboard.tip_of_day' → 'dashboard_tip_of_day' → try 'tip_of_day'
+  const stripped = key.includes('.') ? key.split('.').slice(1).join('_') : null;
+  if (stripped && langs && langs[stripped] !== undefined) return langs[stripped];
+  // Fallback: try key as-is after underscore normalization
+  if (langs && langs[key.replace(/\./g, '_')] !== undefined) return langs[key.replace(/\./g, '_')];
+  return key;
 }
 const R = T;
+
+/** Resolve a dotted i18n key to an I18N lookup key */
+function i18nKey(key) {
+  if (!key) return null;
+  const langs = I18N[currentLang];
+  if (!langs) return null;
+  if (langs[key] !== undefined) return key;
+  const dotNorm = key.replace(/\./g, '_');
+  if (langs[dotNorm] !== undefined) return dotNorm;
+  // Strip prefix: 'dashboard.tip_of_day' → 'tip_of_day'
+  if (key.includes('.')) {
+    const stripped = key.split('.').slice(1).join('_');
+    if (langs[stripped] !== undefined) return stripped;
+  }
+  return null;
+}
 
 function RL(el) {
   if (!el) return;
   const keys = el.dataset ? Object.keys(el.dataset).filter(k => k.startsWith('i18n')) : [];
   keys.forEach(k => {
     const key = el.dataset[k];
-    if (key && I18N[currentLang][key]) {
-      if (k === 'i18n') el.textContent = I18N[currentLang][key];
-      else if (k === 'i18n_placeholder') el.placeholder = I18N[currentLang][key];
-      else if (k === 'i18n_title') el.title = I18N[currentLang][key];
+    const resolved = i18nKey(key);
+    if (resolved) {
+      const val = I18N[currentLang][resolved];
+      if (k === 'i18n') el.textContent = val;
+      else if (k === 'i18n_placeholder') el.placeholder = val;
+      else if (k === 'i18n_title') el.title = val;
     }
   });
   el.querySelectorAll('[data-i18n]').forEach(child => RL(child));
+}
+
+/** Global RL: translate ALL data-i18n elements in the document */
+function RL_all() {
+  document.querySelectorAll('[data-i18n]').forEach(el => RL(el));
 }
 
 function setLang(lang) {
@@ -5634,8 +5702,17 @@ function setLang(lang) {
     const tabId = activeEl.dataset.tab;
     switchTab(tabId);
   }
-  // Update all data-i18n elements
-  document.querySelectorAll('[data-i18n]').forEach(el => RL(el));
+  // Update ALL data-i18n elements (both static and dynamic)
+  RL_all();
+  // Update lang flag
+  const flagBtn = document.getElementById('langToggle');
+  if (flagBtn) {
+    if (lang === 'fr') flagBtn.textContent = '🇫🇷';
+    else flagBtn.textContent = '🇬🇧';
+  }
+  // Update lang on select elements
+  document.querySelectorAll('[data-i18n_placeholder]').forEach(el => RL(el));
+  document.querySelectorAll('[data-i18n_title]').forEach(el => RL(el));
 }
 
 function $(id) { return document.getElementById(id); }
@@ -7503,10 +7580,15 @@ function updateStats(){
   const sel=document.getElementById('newsSort');
   if(!sel) return;
   const s=sel.value; let items=[...NEWS];
+  // Category filter
   if(newsFilter!=='all'&&newsFilter!=='FR')
     items=items.filter(n=>n.cat===newsFilter);
   else if(newsFilter==='FR')
     items=items.filter(n=>n.lang==='FR');
+  // Source filter
+  if(window.newsSourceFilter && window.newsSourceFilter.size){
+    items=items.filter(n=>window.newsSourceFilter.has(n.source));
+  }
   if(s==='title') items.sort((a,b)=>a.title.localeCompare(b.title));
   else if(s==='score') items.sort((a,b)=>b.score-a.score);
   else items.sort((a,b)=>b.id-a.id);
@@ -7689,6 +7771,8 @@ function renderNews(){
       this.textContent='Load more articles';
     }
   });
+  // Translate static elements after render
+  RL(a);
 }
 
 function bindFilters(a){
@@ -7696,10 +7780,60 @@ function bindFilters(a){
     newsFilter=this.dataset.cat;
     renderNews();
   }));
-  // Source filter
-  const st=document.getElementById('newsSourceToggle');
-  if(st) st.addEventListener('click',function(){
-    document.getElementById('newsSourceDropdown').classList.toggle('open');
+  // Source filter — now bound in initNews() to avoid lazy-binding issues
+  // Clear source filter
+  const clearBtn=document.getElementById('newsSourceClear');
+  if(clearBtn) clearBtn.addEventListener('click',function(e){
+    e.stopPropagation();
+    document.querySelectorAll('#newsSourceDropdown input[type="checkbox"]').forEach(cb=>cb.checked=false);
+    delete window.newsSourceFilter;
+    renderNews();
+    document.getElementById('newsSourceDropdown').classList.remove('open');
+  });
+}
+
+/** Populate the source dropdown with unique sources from NEWS */
+function populateSources(){
+  const dd=document.getElementById('newsSourceDropdown');
+  if(!dd) return;
+  // Get unique sources
+  const sources=[...new Set(NEWS.map(n=>n.source))].sort();
+  // Generate checkbox items
+  let html='<div class="news-source-items">';
+  sources.forEach(src=>{
+    const count=NEWS.filter(n=>n.source===src).length;
+    const id='src_'+src.replace(/[^a-zA-Z0-9]/g,'_');
+    html+=`<label class="source-item" data-source="${src}">
+      <input type="checkbox" class="source-checkbox" id="${id}" value="${src}" />
+      <span class="source-name">${src}</span>
+      <span class="source-count">${count}</span>
+    </label>`;
+  });
+  html+='</div><div class="news-source-clear"><button id="newsSourceClear">Clear selection</button></div>';
+  dd.innerHTML=html;
+  
+  // Bind checkboxes to filter
+  dd.querySelectorAll('.source-checkbox').forEach(cb=>{
+    cb.addEventListener('change',function(){
+      const checked=dd.querySelectorAll('.source-checkbox:checked');
+      if(checked.length){
+        const sources=new Set();
+        checked.forEach(c=>sources.add(c.value));
+        window.newsSourceFilter=sources;
+      } else {
+        delete window.newsSourceFilter;
+      }
+      renderNews();
+    });
+  });
+  // Bind clear
+  const clearBtn=document.getElementById('newsSourceClear');
+  if(clearBtn) clearBtn.addEventListener('click',function(e){
+    e.stopPropagation();
+    dd.querySelectorAll('.source-checkbox').forEach(cb=>cb.checked=false);
+    delete window.newsSourceFilter;
+    renderNews();
+    dd.classList.remove('open');
   });
 }
 
@@ -7710,6 +7844,12 @@ function initNews(){
     ${'<div class="news-skel-card"><div class="news-skel-img"></div><div class="news-skel-body"><div class="news-skel-line w80"></div><div class="news-skel-line w60"></div><div class="news-skel-line w40"></div></div></div>'.repeat(6)}
   </div>`;
   setTimeout(()=>{
+    populateSources(); // Populate source filter dropdown
+    // Bind source toggle outside renderNews to avoid lazy-binding issues
+    const st=document.getElementById('newsSourceToggle');
+    if(st && !st._bound) { st._bound=true; st.addEventListener('click',function(){
+      document.getElementById('newsSourceDropdown').classList.toggle('open');
+    });}
     renderNews();
     // Re-bind sort
     const sel=document.getElementById('newsSort');
@@ -7737,7 +7877,9 @@ const TC={
 };
 // ===== LESSONS =====
 function renderLessons(){
-  document.getElementById('lessonsGrid').innerHTML=MODULES.map(m=>`
+  const grid=document.getElementById('lessonsGrid');
+  if(!grid) return;
+  grid.innerHTML=MODULES.map(m=>`
     <div class="lesson-concepts">${m.concepts.map(cv=>`<div class="concept-item"><strong>${T(cv.t)}</strong><p>${T(cv.d)}</p></div>`).join('')}</div></div>
   `).join('');
 }
@@ -7813,18 +7955,56 @@ function switchLang(){
   setLang(currentLang);
   
   // Re-render everything
-  RL(); // Update data-i18n DOM elements
+  RL_all();
   renderTicker();
   renderDash();
   renderNews();
   renderTools();
   renderTrain();
-  renderLessons();
-  
-  // Update quiz if running
+  // Only render ISTQB sub-sections if ISTQB tab content exists
+  const lg=document.getElementById('lessonsGrid');
+  if(lg) renderLessons();
   if(qs && !qs.fin) renderQ();
   if(es && !es.fin) renderExam();
-  if(document.getElementById('sub-progress').classList.contains('active')) renderProgress();
+  if(document.getElementById('sub-progress')?.classList.contains('active')) renderProgress();
+}
+
+// ===== READER BUTTON (Web Speech API TTS) =====
+let readerActive=false;
+let readerUtterance=null;
+
+function toggleReader(){
+  const btn=document.getElementById('readerBtn');
+  if(readerActive){
+    stopReader();
+    return;
+  }
+  // Read visible content
+  const activeTab=document.querySelector('.tab-content.active');
+  const text=activeTab?activeTab.innerText||activeTab.textContent:'';
+  if(!text||text.trim().length<10) return;
+  readerActive=true;
+  if(btn) btn.classList.add('active');
+  readerUtterance=new SpeechSynthesisUtterance(text);
+  readerUtterance.lang=currentLang==='fr'?'fr-FR':'en-US';
+  readerUtterance.rate=0.95;
+  readerUtterance.pitch=1.0;
+  readerUtterance.onend=function(){
+    readerActive=false;
+    if(btn) btn.classList.remove('active');
+  };
+  readerUtterance.onerror=function(){
+    readerActive=false;
+    if(btn) btn.classList.remove('active');
+  };
+  speechSynthesis.speak(readerUtterance);
+}
+
+function stopReader(){
+  speechSynthesis.cancel();
+  readerActive=false;
+  const btn=document.getElementById('readerBtn');
+  if(btn) btn.classList.remove('active');
 }
 
 
@@ -7986,6 +8166,7 @@ document.getElementById('navLabs')?.addEventListener('click',function once(){
 });
 // ===== INIT (preserved event listeners) =====
 document.getElementById('langToggle').addEventListener('click', switchLang);
+document.getElementById('readerBtn').addEventListener('click', toggleReader);
 document.getElementById('themeToggle').addEventListener('click', ()=>{
   const cur=document.documentElement.getAttribute('data-theme');
   document.documentElement.setAttribute('data-theme',cur==='dark'?'light':'dark');
