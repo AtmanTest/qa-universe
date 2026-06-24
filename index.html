@@ -7375,7 +7375,7 @@ Can I help with something more specific? 😊`;
 }
 
 // ====== MOBILE NAV ======
-function toggleMobileNav(){
+window.toggleMobileNav = function(){
   const drawer=document.getElementById('mobileDrawer');
   const btn=document.getElementById('hamburgerBtn');
   if(!drawer) return;
@@ -7389,7 +7389,7 @@ function toggleMobileNav(){
     if(btn) btn.classList.add('active');
     document.body.style.overflow='hidden';
   }
-}
+};
 
 // ====== INITIALIZATION ======
 function init() {
