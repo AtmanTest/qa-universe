@@ -2700,7 +2700,8 @@ h5 { font-size: 1rem; }
     display: none;
   }
 
-  .nav-actions .nav-btn {
+  .nav-actions .nav-action-btn,
+  .nav-actions .theme-toggle {
     display: none;
   }
 
@@ -3240,10 +3241,10 @@ h5 { font-size: 1rem; }
       <button class="nav-action-btn lang-toggle" id="langToggle" aria-label="Toggle language">🇫🇷</button>
       <button class="nav-action-btn reader-btn" id="readerBtn" aria-label="Read aloud" title="Options Reader">🔊</button>
       <!-- Hamburger (Mobile) -->
-      <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileNav()" aria-label="Menu">
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
+      <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileNav()" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
     </div>
   </div>
@@ -7371,6 +7372,23 @@ How can I help you today?`;
 • <strong>Labs</strong> tab — Practice challenges & templates<br>
 • <strong>ISTQB Prep</strong> tab — Study lessons & take exams<br><br>
 Can I help with something more specific? 😊`;
+}
+
+// ====== MOBILE NAV ======
+function toggleMobileNav(){
+  const drawer=document.getElementById('mobileDrawer');
+  const btn=document.getElementById('hamburgerBtn');
+  if(!drawer) return;
+  const isOpen=drawer.classList.contains('open');
+  if(isOpen){
+    drawer.classList.remove('open');
+    if(btn) btn.classList.remove('active');
+    document.body.style.overflow='';
+  } else {
+    drawer.classList.add('open');
+    if(btn) btn.classList.add('active');
+    document.body.style.overflow='hidden';
+  }
 }
 
 // ====== INITIALIZATION ======
