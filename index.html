@@ -5658,6 +5658,20 @@ h5 { font-size: 1rem; }
 .ai-chat-pulse{width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;animation:aiPulse 1.5s infinite}
 @keyframes aiPulse{0%,100%{opacity:1}50%{opacity:.3}}
 
+/* Vibration every 10s */
+.ai-fab{animation:aiIdleVibe 10s infinite}
+.ai-fab.active{animation:none}
+@keyframes aiIdleVibe{
+  0%,93%,100%{transform:scale(1);box-shadow:0 4px 20px rgba(0,200,180,0.35)}
+  95%{transform:scale(1.08);box-shadow:0 6px 28px rgba(0,200,180,0.5)}
+  97%{transform:scale(1);box-shadow:0 4px 20px rgba(0,200,180,0.35)}
+}
+
+/* Quick questions */
+.ai-quick-qs{display:flex;flex-wrap:wrap;gap:4px;padding:8px 16px 4px}
+.ai-quick-btn{font-size:11px;padding:4px 10px;border-radius:999px;background:rgba(0,200,180,0.08);border:1px solid rgba(0,200,180,0.15);color:var(--accent);cursor:pointer;transition:all .12s;white-space:nowrap;font-family:var(--font-body)}
+.ai-quick-btn:hover{background:rgba(0,200,180,0.18);border-color:var(--accent)}
+
 /* ═══════════════════════════════════════════════
    END OF QA UNIVERSE v2 DESIGN SYSTEM
    ═══════════════════════════════════════════════ */
@@ -5693,10 +5707,7 @@ h5 { font-size: 1rem; }
         🔔
         <span class="notification-badge">3</span>
       </button>
-      <label class="theme-toggle" aria-label="Toggle theme">
-        <input type="checkbox" id="themeSwitch" class="theme-switch-input" />
-        <span class="theme-slider"></span>
-      </label>
+      <button class="nav-action-btn" id="themeToggle" aria-label="Toggle theme">🌙</button>
       <button class="nav-action-btn lang-toggle" id="langToggle" aria-label="Toggle language">🇫🇷</button>
       <button class="nav-action-btn reader-btn" id="readerBtn" aria-label="Read aloud" title="Options Reader">🔊</button>
 
@@ -9995,6 +10006,49 @@ window.dismissBanner = function(){
 };
 
 // ====== AI ASSISTANT ======
+const AI_QUESTIONS = [
+  {q:"📘 ISTQB Foundation", k:"istqb"},
+  {q:"📊 CTAL Test Manager", k:"ctal"},
+  {q:"🧪 Good QA Practices", k:"practices"},
+  {q:"💬 Soft Skills", k:"soft"},
+  {q:"⚙️ Hard Skills", k:"hard"},
+  {q:"🎓 Formations & Certifs", k:"training"},
+  {q:"🛤️ Career Evolution", k:"career"},
+  {q:"🤖 AI in Testing", k:"ai"},
+  {q:"🔧 Tools (Playwright, Cypress...)", k:"tools"},
+  {q:"🌍 Domaines (Banque, ERP...)", k:"domains"}
+];
+
+// Quick questions
+(function initQuickQs(){
+  const c=document.getElementById('aiQuickQs');
+  if(!c)return;
+  AI_QUESTIONS.forEach(item=>{
+    const b=document.createElement('button');
+    b.className='ai-quick-btn';
+    b.textContent=item.q;
+    b.onclick=()=>{
+      document.getElementById('aiInput').value=item.q;
+      sendAI();
+    };
+    c.appendChild(b);
+  });
+})();
+
+// AI responses
+const AI_REPLIES = {
+  istqb: "**ISTQB Foundation v4.0** covers 6 chapters:\n1️⃣ Fundamentals of Testing\n2️⃣ Testing Throughout SDLC\n3️⃣ Static Testing\n4️⃣ Test Analysis & Design\n5️⃣ Managing Test Activities\n6️⃣ Test Tools\n\nKey topics: equivalence partitioning, boundary value analysis, statement/decision coverage, defect lifecycle. Need a specific chapter summary?",
+  ctal: "**CTAL-TM v3.0** (Test Manager) focuses on:\n• Risk-based testing strategies\n• Test estimation (3-point, Wideband Delphi)\n• Test process improvement (TMMi, TPI)\n• Distributed & offshore testing\n• Metrics & reporting\n• People management & coaching\n\nSample exam questions available in ISTQB Prep → Exam tab!",
+  practices: "**Good QA Practices:**\n✅ Shift-left testing — start testing early\n✅ Risk-based prioritization\n✅ Pair testing for complex features\n✅ Exploratory testing sessions\n✅ Test data management strategy\n✅ Continuous feedback loops\n✅ Automation pyramid (unit → API → E2E)\n✅ Root cause analysis on defects",
+  soft: "**Key Soft Skills for QA:**\n🗣️ Communication — report bugs clearly, advocate for quality\n🤝 Collaboration — work with devs, PO, business\n🧠 Critical thinking — challenge assumptions\n📋 Organization — track test coverage, manage priorities\n🎯 Attention to detail — spot edge cases\n💡 Adaptability — learn new tools fast\n👥 Mentoring — grow junior QA engineers",
+  hard: "**Hard Skills for QA Engineers:**\n🔹 Test Design: BVA, EP, state transition, use case\n🔹 Automation: Playwright, Cypress, Selenium, Appium\n🔹 API: Postman, REST Assured, contract testing\n🔹 Performance: k6, JMeter, Locust\n🔹 CI/CD: GitHub Actions, GitLab CI, Jenkins\n🔹 Version Control: Git, branching strategies\n🔹 SQL: complex queries, data validation\n🔹 BDD: Gherkin, Cucumber, SpecFlow",
+  training: "**Training Paths & Certifications:**\n• **ISTQB Foundation** (v4.0) — entry-level\n• **ISTQB CTAL-TM** — Test Manager (v3.0)\n• **ISTQB CTAL-TA** — Test Analyst\n• **ISTQB AI Testing** — AI/ML testing\n• **PSPO I** — Scrum Product Owner (Scrum.org)\n• **AWS Cloud Practitioner** — cloud basics\n• **Coursera** — AI & Prompt Engineering, Python, Postman API\n\nCheck the ISTQB Prep tab for sample exams!",
+  career: "**QA Career Evolution:**\n📌 **Junior** (0-2yrs): manual testing, test cases, bug reports\n📌 **Senior** (3-6yrs): automation, mentoring, test strategy\n📌 **Lead/Manager** (6-10yrs): team lead, process, metrics\n📌 **Test Manager** (10+): strategy, governance, stakeholder mgmt\n📌 **QA Architect**: framework design, tool selection\n📌 **QA Director**: org-wide quality, transformation\n\n💡 12yrs in the field → The real growth is in **AI + Automation**",
+  ai: "**AI in Testing (2026):**\n🧠 **MCP (Model Context Protocol)** — connect LLMs to test tools\n🤖 **Agentic Testing** — AI agents that explore, test, report\n📊 **Visual AI Testing** — Applitools, Percy for visual regression\n🔍 **AI Test Generation** — Playwright AI mode, Copilot\n📝 **NLP for BDD** — convert user stories to Gherkin\n⚡ **Self-healing tests** — auto-fix broken locators\n\n**Challenge:** validating AI outputs — no deterministic expected results!",
+  tools: "**Essential QA Tools:**\n🎭 **Playwright** — modern E2E, multi-browser, API + UI\n🔄 **Cypress** — fast component/E2E, real-time debugging\n📱 **Appium** — mobile (iOS + Android) automation\n🐍 **Python + Flask** — test harnesses, API services\n🧩 **MCP** — Model Context Protocol for AI agents\n🤖 **LM Studio / Ollama** — run local LLMs\n🔧 **Postman** — API testing & collections\n📋 **Xray / TestRail** — test management\n🐙 **GitHub Actions** — CI/CD for tests",
+  domains: "**QA by Domain:**\n🏦 **Banking/Fintech** — regulatory testing, transaction flows, SOX compliance\n🛒 **E-commerce** — cart/checkout flows, payment gateways, load testing\n🏥 **Healthcare** — patient data, HIPAA, clinical workflows\n📦 **ERP** — SAP/Oracle integration, data migration, financial modules\n📱 **Mobile** — iOS/Android, gestures, push notifications\n☁️ **Cloud/SaaS** — multi-tenant, SSO, API rate limiting"
+};
+
 let aiOpen = false;
 
 window.toggleAI = function() {
@@ -10005,10 +10059,12 @@ window.toggleAI = function() {
     panel.classList.add('open');
     fab.classList.add('active');
     fab.textContent = '✕';
+    fab.style.animation = 'none';
   } else {
     panel.classList.remove('open');
     fab.classList.remove('active');
     fab.textContent = '🤖';
+    fab.style.animation = '';
   }
 };
 
@@ -10020,38 +10076,42 @@ window.sendAI = async function() {
   const btn = document.getElementById('aiSendBtn');
   btn.disabled = true;
 
-  // Add user message
   const msgs = document.getElementById('aiMessages');
   msgs.innerHTML += `<div class="ai-msg user">${msg.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`;
-  msgs.innerHTML += `<div class="ai-msg bot" id="aiThinking"><i>Thinking...</i></div>`;
+  msgs.innerHTML += `<div class="ai-msg bot" id="aiThinking"><i>🤔 Thinking...</i></div>`;
   msgs.scrollTop = msgs.scrollHeight;
 
-  // Try OpenRouter API, fallback to demo
+  // Find matching topic
   let reply = '';
-  try {
-    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json','Authorization':'Bearer sk-or-v1-demo','HTTP-Referer':'https://qativerse.com','X-Title':'QA Universe'},
-      body: JSON.stringify({model:'openai/gpt-4o-mini',messages:[{role:'user',content:msg}],max_tokens:200})
-    });
-    const data = await res.json();
-    reply = data.choices?.[0]?.message?.content || 'No response.';
-  } catch(e) {
-    // Demo fallback
-    const demos = [
-      "Great question! In QA, the key is to start with clear acceptance criteria.",
-      "For ISTQB Foundation, focus on the testing principles and the fundamental test process.",
-      "Playwright is excellent for modern E2E testing — check the Tools tab for guides!",
-      "AI testing is evolving fast. MCP and agent-based testing are the next frontier.",
-      "The best test strategy combines risk-based testing with automation ROI analysis."
-    ];
-    await new Promise(r => setTimeout(r, 800));
-    reply = demos[Math.floor(Math.random() * demos.length)];
+  const lower = msg.toLowerCase();
+  for (const [key, val] of Object.entries(AI_REPLIES)) {
+    if (lower.includes(key) ||
+        (key==='istqb' && (lower.includes('foundation')||lower.includes('v4')||lower.includes('niveau'))) ||
+        (key==='ctal' && (lower.includes('manager')||lower.includes('advanced'))) ||
+        (key==='practices' && (lower.includes('practice')||lower.includes('best'))) ||
+        (key==='soft' && lower.includes('soft')) ||
+        (key==='hard' && (lower.includes('hard')||lower.includes('skill')||lower.includes('compétence'))) ||
+        (key==='training' && (lower.includes('formation')||lower.includes('certif')||lower.includes('school'))) ||
+        (key==='career' && (lower.includes('career')||lower.includes('carrière')||lower.includes('evol'))) ||
+        (key==='ai' && (lower.includes('ai ')||lower.includes('artificial')||lower.includes('intelligence')||lower.includes('llm'))) ||
+        (key==='tools' && (lower.includes('playwright')||lower.includes('cypress')||lower.includes('selenium')||lower.includes('tool')||lower.includes('outil'))) ||
+        (key==='domains' && (lower.includes('domain')||lower.includes('secteur')||lower.includes('banque')||lower.includes('banking')))) {
+      reply = val;
+      break;
+    }
   }
 
-  // Remove thinking indicator, add reply
+  await new Promise(r => setTimeout(r, 600));
+
   const thinkEl = document.getElementById('aiThinking');
   if (thinkEl) thinkEl.remove();
+
+  if (!reply) {
+    reply = "💡 That's a great question! I'm a specialized QA assistant. Try using the quick questions above about ISTQB, tools, practices, or click any topic. If you need something specific, ask me again with more detail!";
+  }
+
+  // Convert markdown **bold** to <b>
+  reply = reply.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
   msgs.innerHTML += `<div class="ai-msg bot">${reply}</div>`;
   msgs.scrollTop = msgs.scrollHeight;
   btn.disabled = false;
@@ -11485,19 +11545,20 @@ console.log('🟡 bootApp registered at script end, readyState=' + document.read
   <div class="ai-chat-panel" id="aiChatPanel">
     <div class="ai-chat-header">
       <div class="ai-chat-header-title">
-        <span class="ai-chat-pulse"></span> QA Assistant
+        <span class="ai-chat-pulse"></span> 🤖 QA Guide Assistant
       </div>
       <button class="ai-chat-close" onclick="toggleAI()">✕</button>
     </div>
     <div class="ai-chat-messages" id="aiMessages">
-      <div class="ai-msg system">🤖 I'm your QA Universe assistant. Ask me about testing, tools, ISTQB, or the latest news!</div>
+      <div class="ai-msg system">👋 **Hi!** I'm your QA Universe guide. Ask me anything about:</div>
     </div>
+    <div class="ai-quick-qs" id="aiQuickQs"></div>
     <div class="ai-chat-input-wrap">
-      <input class="ai-chat-input" id="aiInput" placeholder="Ask anything about QA..." onkeydown="if(event.key==='Enter')sendAI()">
+      <input class="ai-chat-input" id="aiInput" placeholder="Ask about ISTQB, QA tools, careers..." onkeydown="if(event.key==='Enter')sendAI()">
       <button class="ai-chat-send" id="aiSendBtn" onclick="sendAI()">➤</button>
     </div>
   </div>
-  <button class="ai-fab" id="aiFab" onclick="toggleAI()" title="AI Assistant">🤖</button>
+  <button class="ai-fab" id="aiFab" onclick="toggleAI()" title="QA Guide Assistant">🤖</button>
 </div>
 </body>
 </html>
