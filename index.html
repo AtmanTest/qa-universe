@@ -5630,11 +5630,51 @@ h5 { font-size: 1rem; }
 .footer-sep{color:var(--text-faint);font-size:12px}
 
 /* ═══════════════════════════════════════════════
+   48. TOP BAR (Creator avatar hors navbar)
+   ═══════════════════════════════════════════════ */
+.top-bar{position:relative;height:42px;background:var(--bg);display:flex;align-items:center;justify-content:flex-end;padding:0 24px;z-index:1001}
+.top-bar .creator-avatar-wrapper{position:relative}
+.top-bar .creator-dropdown-menu{position:absolute;top:44px;right:0;z-index:2000}
+
+/* Mobile: top-bar plus mince sur mobile */
+@media(max-width:639px){
+  .top-bar{height:36px;padding:0 12px}
+}
+
+/* ═══════════════════════════════════════════════
    END OF QA UNIVERSE v2 DESIGN SYSTEM
    ═══════════════════════════════════════════════ */
 </style>
 </head>
 <body>
+<!-- ========== TOP BAR ========== -->
+<div class="top-bar">
+  <!-- Creator Avatar TJ (hors navbar, en haut à droite) -->
+  <div class="creator-avatar-wrapper" id="creatorAvatarWrapper">
+    <button class="creator-avatar-btn" id="creatorAvatarBtn" onclick="toggleCreatorDropdown(event)" aria-label="Creator profile">TJ</button>
+    <div class="creator-dropdown-menu" id="creatorDropdown">
+      <div class="cd-section cd-avatar-section">
+        <div class="cd-avatar-big">TJ</div>
+        <div class="cd-user-info">
+          <div class="cd-user-name">Thasin Jahangir</div>
+          <div class="cd-user-title">Consultant QA Senior</div>
+          <div class="cd-user-company">Freelance SASU · Paris &amp; Remote</div>
+          <span class="cd-availability-badge">🟢 Open to missions</span>
+        </div>
+      </div>
+      <div class="cd-divider"></div>
+      <div class="cd-section cd-links-section">
+        <a class="cd-link" href="https://www.linkedin.com/in/thasin-j-47582635/" target="_blank" rel="noopener noreferrer"><span class="cd-link-icon">🔗</span> LinkedIn Profile</a>
+        <a class="cd-link" href="mailto:thasin@live.com"><span class="cd-link-icon">📧</span> thasin@live.com</a>
+      </div>
+      <div class="cd-divider"></div>
+      <div class="cd-section cd-signature-section">
+        <div class="cd-signature">✦ Conceived by TJ · Crafted with AI</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ========== NAVBAR ========== -->
 <nav class="navbar" role="navigation" aria-label="Main navigation">
   <div class="nav-inner">
@@ -5670,36 +5710,6 @@ h5 { font-size: 1rem; }
       </label>
       <button class="nav-action-btn lang-toggle" id="langToggle" aria-label="Toggle language">🇫🇷</button>
       <button class="nav-action-btn reader-btn" id="readerBtn" aria-label="Read aloud" title="Options Reader">🔊</button>
-
-      <!-- Creator Avatar TJ -->
-      <div class="creator-avatar-wrapper" id="creatorAvatarWrapper">
-        <button class="creator-avatar-btn" id="creatorAvatarBtn" onclick="toggleCreatorDropdown(event)" aria-label="Creator profile">
-          TJ
-        </button>
-        <div class="creator-dropdown-menu" id="creatorDropdown">
-          <!-- Avatar Section -->
-          <div class="cd-section cd-avatar-section">
-            <div class="cd-avatar-big">TJ</div>
-            <div class="cd-user-info">
-              <div class="cd-user-name">Thasin Jahangir</div>
-              <div class="cd-user-title">Consultant QA Senior</div>
-              <div class="cd-user-company">Freelance SASU · Paris &amp; Remote</div>
-              <span class="cd-availability-badge">🟢 Open to missions</span>
-            </div>
-          </div>
-          <div class="cd-divider"></div>
-          <!-- Links -->
-          <div class="cd-section cd-links-section">
-            <a class="cd-link" href="https://www.linkedin.com/in/thasin-j-47582635/" target="_blank" rel="noopener noreferrer"><span class="cd-link-icon">🔗</span> LinkedIn Profile</a>
-            <a class="cd-link" href="mailto:thasin@live.com"><span class="cd-link-icon">📧</span> thasin@live.com</a>
-          </div>
-          <div class="cd-divider"></div>
-          <!-- Signature -->
-          <div class="cd-section cd-signature-section">
-            <div class="cd-signature">✦ Conceived by TJ · Crafted with AI</div>
-          </div>
-        </div>
-      </div>
 
       <!-- Hamburger (Mobile) -->
       <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileNav()" aria-label="Menu">
