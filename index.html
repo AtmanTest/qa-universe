@@ -7172,6 +7172,7 @@ Can I help with something more specific? 😊`;
 
 // ====== INITIALIZATION ======
 function init() {
+  try {
   // Set language
   document.documentElement.lang = currentLang;
 
@@ -7191,6 +7192,9 @@ function init() {
   RL(document.getElementById('app-nav'));
 
   console.log(`🚀 QA Universe v2 initialized — ${TOOLS_DATA.length} tools, ${LESSONS.length} lessons, ${currentLang} language`);
+} catch(e) {
+  console.error('INIT ERROR:', e.message, e.stack);
+}
 }
 
 
