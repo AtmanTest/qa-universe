@@ -8463,11 +8463,19 @@ document.querySelectorAll('.tool-modal-tab').forEach(tab=>{
     if(sec)sec.classList.add('active');
   });
 });
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
-} else {
+// Ensure init runs on page load — handles both DOMContentLoaded and late scripts
+function bootApp() {
+  if (window.__qaBooted) return;
+  window.__qaBooted = true;
   init();
 }
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootApp);
+} else {
+  bootApp();
+}
+// Fallback: if nothing else worked, try after a short delay
+setTimeout(bootApp, 100);
 </script>
 </body>
 </html>
