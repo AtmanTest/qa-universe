@@ -4972,7 +4972,7 @@ h5 { font-size: 1rem; }
     <button class="chatbot-send-btn" onclick="sendChatbotMessage()">➡️</button>
   </div>
 </div>
-<script>
+<script>try {
 /* ========================================
    QA Universe v2 — Main Application
    Complete JavaScript — Vanilla JS
@@ -5483,6 +5483,7 @@ let filteredTools = [...TOOLS_DATA];
 function T(key) {
   return I18N[currentLang] && I18N[currentLang][key] !== undefined ? I18N[currentLang][key] : key;
 }
+const R = T;
 
 function RL(el) {
   if (!el) return;
@@ -8462,19 +8463,26 @@ document.querySelectorAll('.tool-modal-tab').forEach(tab=>{
     if(sec)sec.classList.add('active');
   });
 });
+} catch(e) { console.error('🔥 Fatal script error:', e.message, e.lineNumber ? 'line:'+e.lineNumber : ''); }
 // Ensure init runs on page load — handles both DOMContentLoaded and late scripts
 function bootApp() {
   if (window.__qaBooted) return;
   window.__qaBooted = true;
+  console.log('🟢 bootApp called, readyState=' + document.readyState);
   init();
 }
+// Try DOMContentLoaded vs direct
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', bootApp);
 } else {
   bootApp();
 }
-// Fallback: if nothing else worked, try after a short delay
+// Fallback: if nothing else worked, try after delays
 setTimeout(bootApp, 100);
+setTimeout(bootApp, 500);
+// Also try on pageshow (handles bfcache restores)
+window.addEventListener('pageshow', bootApp);
+console.log('🟡 bootApp registered at script end, readyState=' + document.readyState);
 </script>
 </body>
 </html>
