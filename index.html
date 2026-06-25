@@ -560,7 +560,8 @@ body::after {
   pointer-events: none;
 }
 
-.mobile-drawer.open {
+.mobile-drawer.open,
+.mobile-drawer-overlay.open .mobile-drawer {
   transform: translateY(0);
   opacity: 1;
   pointer-events: auto;
@@ -2702,7 +2703,8 @@ h5 { font-size: 1rem; }
   }
 
   .nav-actions .nav-action-btn,
-  .nav-actions .theme-toggle {
+  .nav-actions .theme-toggle,
+  .nav-actions .creator-avatar-wrapper {
     display: none;
   }
 
@@ -5671,6 +5673,40 @@ h5 { font-size: 1rem; }
 .ai-quick-qs{display:flex;flex-wrap:wrap;gap:4px;padding:8px 16px 4px}
 .ai-quick-btn{font-size:11px;padding:4px 10px;border-radius:999px;background:rgba(0,200,180,0.08);border:1px solid rgba(0,200,180,0.15);color:var(--accent);cursor:pointer;transition:all .12s;white-space:nowrap;font-family:var(--font-body)}
 .ai-quick-btn:hover{background:rgba(0,200,180,0.18);border-color:var(--accent)}
+
+/* ═══════════════════════════════════════════════
+   49. MOBILE OVERRIDES
+   ═══════════════════════════════════════════════ */
+@media(max-width:639px){
+  /* AI Chat panel full width on mobile */
+  .ai-chat-panel{right:12px;left:12px;width:auto;max-width:none;max-height:70vh;top:76px;transform:none}
+  .ai-chat-panel.open{animation:aiSlideInMobile .25s cubic-bezier(0.16,1,0.3,1)}
+  @keyframes aiSlideInMobile{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+  .ai-assistant-wrapper{right:12px;top:auto;bottom:16px;transform:none}
+  .ai-fab{width:48px;height:48px;font-size:20px}
+  .ai-chat-messages{max-height:50vh;min-height:150px}
+  .ai-quick-qs{overflow-x:auto;flex-wrap:nowrap;padding:6px 12px 2px;gap:4px}
+
+  /* Main content — prevent truncation */
+  .tab-content{padding:12px 16px !important}
+
+  /* Dashboard hero spacing */
+  .dash-hero{padding:16px 14px}
+
+  /* Dedicated mobile section */
+  .nav-inner .nav-tabs{display:none}
+
+  /* Mobile drawer: cover full overlay */
+  .mobile-drawer{top:56px;padding:12px 16px}
+  .mobile-drawer .nav-tab{padding:10px 14px;font-size:14px}
+}
+
+/* Light mode chat panel override */
+[data-theme="light"] .ai-chat-panel{background:#fff;border-color:rgba(0,0,0,0.1)}
+[data-theme="light"] .ai-chat-input{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,0.1);color:#1a1a2e}
+[data-theme="light"] .ai-msg.bot{background:rgba(0,0,0,0.04);color:#1a1a2e}
+[data-theme="light"] .ai-msg.system{background:rgba(0,0,0,0.02);color:#666}
+[data-theme="light"] .ai-chat-header{border-bottom-color:rgba(0,0,0,0.08)}
 
 /* ═══════════════════════════════════════════════
    END OF QA UNIVERSE v2 DESIGN SYSTEM
