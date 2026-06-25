@@ -527,19 +527,21 @@ body::after {
 
 /* Mobile drawer overlay */
 .mobile-drawer-overlay {
-  display: none;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
   position: fixed;
   inset: 0;
   z-index: 90;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
-  opacity: 0;
-  transition: opacity 180ms ease;
+  transition: opacity 180ms ease, visibility 180ms ease;
 }
 
 .mobile-drawer-overlay.open {
-  display: flex;
+  visibility: visible;
   opacity: 1;
+  pointer-events: auto;
 }
 
 .mobile-drawer {
@@ -2856,6 +2858,25 @@ h5 { font-size: 1rem; }
   --font-display: 'Sora', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
 }
+[data-theme="light"] .news-hero-card .hero-overlay {
+  background: linear-gradient(180deg, transparent 20%, rgba(240, 241, 245, 0.92) 75%) !important;
+}
+[data-theme="light"] .news-card-v2 .card-img-overlay {
+  background: linear-gradient(transparent, rgba(240, 241, 245, 0.7)) !important;
+}
+[data-theme="light"] .news-hero-card .hero-source-badge {
+  background: rgba(255, 255, 255, 0.85) !important;
+  color: #1a1a2e !important;
+}
+[data-theme="light"] .news-hero-card .hero-title-lg,
+[data-theme="light"] .news-hero-card .hero-meta-row,
+[data-theme="light"] .news-hero-card .hero-excerpt {
+  color: #1a1a2e !important;
+}
+[data-theme="light"] .ai-chat-panel {
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1) !important;
+}
+
 
 [data-theme="light"] body {
   background: #f4f5f9;
@@ -5679,7 +5700,7 @@ h5 { font-size: 1rem; }
    ═══════════════════════════════════════════════ */
 @media(max-width:639px){
   /* AI Chat panel full width on mobile */
-  .ai-chat-panel{right:12px;left:12px;width:auto;max-width:none;max-height:70vh;top:76px;transform:none}
+  .ai-chat-panel{right:12px;left:12px;width:auto;max-width:none;max-height:70vh;bottom:68px;top:auto;transform:none}
   .ai-chat-panel.open{animation:aiSlideInMobile .25s cubic-bezier(0.16,1,0.3,1)}
   @keyframes aiSlideInMobile{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
   .ai-assistant-wrapper{right:12px;top:auto;bottom:16px;transform:none}
@@ -5782,7 +5803,7 @@ h5 { font-size: 1rem; }
   </div>
 
   <!-- Mobile Drawer Overlay -->
-  <div class="mobile-drawer-overlay" id="mobileDrawer">
+  <div class="mobile-drawer-overlay" id="mobileDrawer" onclick="if(event.target===this)toggleMobileNav()">
     <div class="mobile-drawer">
       <button class="mobile-drawer-close" onclick="toggleMobileNav()">✕</button>
       <button class="nav-tab active" data-tab="tab-news" onclick="switchTab('tab-news'); toggleMobileNav();" data-i18n="nav.news">📰 News</button>
