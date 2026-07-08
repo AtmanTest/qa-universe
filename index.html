@@ -1741,7 +1741,7 @@ h5 { font-size: 1rem; }
 
 .challenge-card .challenge-desc {
   font-size: 0.8125rem;
-  color: #8b8fa8;
+  color: #b0b4c8;
   line-height: 1.5;
   flex: 1;
 }
@@ -1783,7 +1783,7 @@ h5 { font-size: 1rem; }
 
 .skill-assessment .skill-item .skill-name {
   font-size: 0.8125rem;
-  color: #8b8fa8;
+  color: #b0b4c8;
   min-width: 100px;
 }
 
@@ -1815,7 +1815,7 @@ h5 { font-size: 1rem; }
 
 .template-card .template-desc {
   font-size: 0.75rem;
-  color: #8b8fa8;
+  color: #b0b4c8;
 }
 
 /* Test Generator Form */
@@ -1880,7 +1880,7 @@ h5 { font-size: 1rem; }
   align-items: center;
   gap: 8px;
   font-size: 0.8125rem;
-  color: #8b8fa8;
+  color: #c8cae0;
 }
 
 .test-generator .form-checkbox input[type="checkbox"] {
@@ -4693,7 +4693,7 @@ h5 { font-size: 1rem; }
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 9999px;
   background: #1a1d2e;
-  color: #8b8fa8;
+  color: #c8cae0;
   font-size: 0.8125rem;
   font-weight: 500;
   cursor: pointer;
@@ -4722,6 +4722,38 @@ h5 { font-size: 1rem; }
   display: block;
 }
 
+/* Labs tabs (renderLabs generated) */
+.labs-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.labs-tabs .lab-tab {
+  padding: 10px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  background: #1a1d2e;
+  color: #c8cae0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 120ms ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.labs-tabs .lab-tab:hover {
+  color: #e8e9f0;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.labs-tabs .lab-tab.active {
+  background: rgba(0, 200, 180, 0.15);
+  color: #00c8b4;
+  border-color: rgba(0, 200, 180, 0.3);
+}
+
 /* Challenge Card (within Labs) */
 .challenge-header {
   display: flex;
@@ -4733,7 +4765,7 @@ h5 { font-size: 1rem; }
 
 .challenge-date {
   font-size: 0.75rem;
-  color: #8b8fa8;
+  color: #b0b4c8;
 }
 
 .challenge-category {
