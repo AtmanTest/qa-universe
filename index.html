@@ -582,11 +582,25 @@ body::after {
 .tab-content {
   display: none;
   animation: tabFadeIn 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  position: relative;
+  overflow: hidden;
 }
 
 .tab-content.active {
   display: block;
 }
+
+/* Tab background images — subtle overlays */
+.tab-content::before{
+  content:'';position:absolute;inset:0;background-size:cover;background-position:center;
+  opacity:0;pointer-events:none;z-index:0;transition:opacity .4s;
+}
+.tab-content.active::before{opacity:1}
+#tab-home::before{background-image:url(images/home-bg.png);opacity:.07}
+#tab-tools::before{background-image:url(images/tools-bg.png);opacity:.06}
+#tab-training::before{background-image:url(images/training-bg.png);opacity:.06}
+#tab-labs::before{background-image:url(images/labs-bg.png);opacity:.06}
+.tab-content>*{position:relative;z-index:1}
 
 @keyframes tabFadeIn {
   from {
