@@ -8536,6 +8536,7 @@ function renderDash() {
 
   // Two-column layout
   let html = `
+    <img class="section-illu" src="images/qa_dashboard.png" alt="Dashboard analytics illustration" style="max-width:320px;margin:0 auto 24px">
     <!-- Creator Hero Card -->
     <div class="hero-card dash-hero" id="dashHero">
       <div class="hero-left">
@@ -8709,6 +8710,7 @@ function renderTools() {
   const pageTools = filteredTools.slice(startIdx, startIdx + TOOLS_PER_PAGE);
 
   let html = `
+    <img class="section-illu" src="images/qa_tools.png" alt="QA testing tools illustration" style="max-width:320px;margin:0 auto 24px">
     <div class="tools-header">
       <h2>${T('tools_title')}</h2>
       <div class="tools-controls">
@@ -8869,6 +8871,7 @@ function renderTrain() {
   if (!container) return;
 
   let html = `
+    <img class="section-illu" src="images/qa_training.png" alt="QA training roadmap illustration" style="max-width:320px;margin:0 auto 24px">
     <h2>${T('training_title')}</h2>
 
     <!-- Certifications -->
@@ -9027,6 +9030,7 @@ function renderLabs() {
   if (!container) return;
 
   container.innerHTML = `
+    <img class="section-illu" src="images/qa_labs.png" alt="QA testing labs illustration" style="max-width:320px;margin:0 auto 24px">
     <h2>${T('labs_title')}</h2>
     <div class="labs-tabs">
       <button class="lab-tab active" data-lab="daily" onclick="switchLabTab(this, 'daily')">${T('labs_daily')}</button>
@@ -9388,6 +9392,7 @@ function renderIstqb() {
   if (!container) return;
 
   let html = `
+    <img class="section-illu" src="images/qa_istqb.png" alt="ISTQB certification illustration" style="max-width:320px;margin:0 auto 24px">
     <h2>${T('istqb_title')}</h2>
     <div class="istqb-tabs">
       <button class="istqb-tab active" data-istqb="lessons" onclick="switchIstqbTab(this, 'lessons')">${T('lessons_title')}</button>
