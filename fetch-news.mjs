@@ -14,19 +14,17 @@ const INDEX = join(__dirname, 'index.html');
 
 // ===== RSS FEEDS =====
 const FEEDS = [
-  'https://feeds.feedburner.com/TestingCircus',
   'https://www.ministryoftesting.com/feed',
-  'https://saucelabs.com/blog/feed',
   'https://www.softwaretestingnews.co.uk/feed',
-  'https://testautomationu.applitools.com/feed.xml',
-  'https://martinfowler.com/feed.atom',
   'https://testing.googleblog.com/feeds/posts/default',
+  'https://martinfowler.com/feed.atom',
+  'https://hnrss.org/newest?q=software+testing&count=20',
+  'https://hnrss.org/newest?q=test+automation&count=20',
+  'https://hnrss.org/newest?q=QA+testing&count=20',
+  'https://hnrss.org/newest?q=playwright+OR+cypress+OR+selenium&count=20',
   'https://dev.to/feed/tag/testing',
   'https://dev.to/feed/tag/qa',
-  'https://dev.to/feed/tag/automation',
   'https://dev.to/feed/tag/softwaretesting',
-  'https://hnrss.org/newest?q=QA+testing&count=20',
-  'https://hnrss.org/newest?q=test+automation&count=20',
 ];
 
 // ===== CATEGORIZATION RULES =====
@@ -53,6 +51,40 @@ function categorize(title, excerpt) {
     if (rule.keywords.some(kw => text.includes(kw))) return rule.cat;
   }
   return 'QA News'; // default
+}
+
+// ===== CONTENT FILTER =====
+// Reject articles clearly unrelated to software QA/testing
+const REJECT_WORDS = [
+  'car ', 'cars', 'truck', 'vehicle', 'ev ', 'evs', 'battery', 'engine', 'motor',
+  'hotel', 'marriott', 'vacation', 'travel', 'tourist',
+  'crypto', 'bitcoin', 'blockchain', 'nft', 'token', 'wallet', 'mining',
+  'stock ', 'stocks', 'trading', 'investment', 'portfolio', 'dividend',
+  'recipe', 'food ', 'cooking', 'restaurant', 'wine ',
+  'movie', 'film ', 'celebrity', 'hollywood',
+  'sport', 'soccer', 'football', 'basketball', 'nfl', 'nba',
+  'fashion', 'beauty', 'makeup',
+  'pets', 'dog ', 'cat ', 'animal',
+  'gaming', 'playstation', 'xbox', 'nintendo', 'fortnite',
+  'training in ', 'training institute', 'learnmore technologies', 'marathahalli',
+];
+
+function isRelevant(title, excerpt) {
+  const text = ((title || '') + ' ' + (excerpt || '')).toLowerCase();
+  // Must contain at least one QA/testing keyword to be relevant
+  const relevantKws = ['test', 'testing', 'qa', 'quality', 'automation', 'bug',
+    'playwright', 'cypress', 'selenium', 'api', 'integration', 'regression',
+    'performance', 'security', 'deploy', 'pipeline', 'ci/cd', 'coverage',
+    'istqb', 'certification', 'tester', 'devops', 'validation',
+    'ai', 'llm', 'agent', 'prompt', 'assert', 'framework',
+    'code review', 'static analysis', 'lint', 'traceability',
+  ];
+  const hasRelevant = relevantKws.some(kw => text.includes(kw));
+  if (!hasRelevant) return false;
+
+  // Reject if too many non-QA words match
+  const rejectCount = REJECT_WORDS.filter(w => text.includes(w)).length;
+  return rejectCount < 2; // allow 1 accidental match, reject 2+
 }
 
 // ===== FETCH & PARSE =====
@@ -203,11 +235,15 @@ async function main() {
     return true;
   });
 
+  // Filter out non-QA content (cars, crypto, hotels, etc.)
+  const filtered = unique.filter(item => isRelevant(item.title, item.excerpt));
+  console.log(`After content filter: ${filtered.length} items (removed ${unique.length - filtered.length} unrelated)`);
+
   // Sort by date descending
-  unique.sort((a, b) => b.date.getTime() - a.date.getTime());
+  filtered.sort((a, b) => b.date.getTime() - a.date.getTime());
 
   // Take top 60
-  const top60 = unique.slice(0, 60);
+  const top60 = filtered.slice(0, 60);
 
   if (top60.length === 0) {
     console.error('ERROR: 0 articles fetched — not updating index.html');
