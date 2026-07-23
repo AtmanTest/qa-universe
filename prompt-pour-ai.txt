@@ -1,124 +1,190 @@
 ═══════════════════════════════════════════════════════════════
-  PROMPT POUR L'AI DE CORRECTION — QA UNIVERSE SITE
-  Transmission entre l'Agent Hermes (Hermes Agent) et toi
+  PROMPT POUR L'AGENT HERMES — QA UNIVERSE  (v2 — Audit complet)
+  Transmission entre Hermes Agent et l'agent de correction
 ═══════════════════════════════════════════════════════════════
 
 ## 🎯 OBJECTIF
-Corriger et améliorer le site QA Universe — un site web statique monopage (single-file HTML/CSS/JS) dédié au monde du QA/Testing. Tu trouveras le code source en section RESSOURCES ci-dessous.
+Corriger, structurer et étendre QA Universe — site statique monofichier HTML/CSS/JS dédié au QA/Testing, hébergé sur GitHub Pages.
 
-## 📋 CONTEXTE
-- C'est un fichier HTML unique (~11 500 lignes, ~490 KB) avec tout le CSS inline dans <style> et tout le JS inline dans <script>
-- Le site est hébergé sur GitHub Pages (recette : https://atmantest.github.io/recette-qa-universe/, prod : https://atmantest.github.io/qa-universe/)
-- L'utilisateur est Thasin Jahangir, Consultant QA Senior, il parle français
-- Le build est validé par une suite de tests Playwright (21 tests, commande : node tests-bugs.mjs)
-- L'agent principal (Hermes Agent) appliquera tes corrections localement, lancera les tests, commitera et pushera
+Repos :
+  recette : https://github.com/AtmanTest/recette-qa-universe
+  prod    : https://github.com/AtmanTest/qa-universe
+Pages :
+  recette : https://atmantest.github.io/recette-qa-universe/
+  prod    : https://atmantest.github.io/qa-universe/
 
-## 🔴 PROBLÈMES SIGNALÉS À CORRIGER (par priorité)
+---
 
-### 1. RESPONSIVE MOBILE — CORRECTIONS INCOMPLÈTES
-Le burger menu ne fonctionnait pas (corrigé en partie) mais plusieurs bugs persistent :
-- **Pages tronquées** : quand on clique sur un onglet (Dashboard, Tools, ISTQB Prep, etc.) sur mobile, le contenu dépasse / est coupé
-- **Chat panel tronqué** : la fenêtre de l'assistant IA 🤖 (position:fixed, right:88px) est trop grande et coupée sur mobile
-- **TJ avatar** : le cercle "TJ" dans la navbar doit être caché sur mobile (il prend de la place inutilement)
-- **Navbar overflow** : les icônes dans .nav-actions débordent sur mobile
+## 📋 CONTEXTE TECHNIQUE
+- Fichier principal : `index.html` (~11 500 lignes, ~490 KB), tout CSS/JS inline
+- Pipeline news : `fetch-news.mjs` — collecte RSS/Atom, filtre QA, injecte bloc `const NEWS` dans index.html
+- Tests régression : `tests-bugs.mjs` — suite Playwright, commande `node tests-bugs.mjs`
+- Automatisation : `.github/workflows/update-news.yml` (cron UTC + workflow_dispatch)
+- Backups : `index.backup.html`, `index.v2.backup.html`, `index.v3.3.backup.html`, `qa-universe-v1-complete.html`
+- L'utilisateur est Thasin Jahangir, Consultant QA Senior, communique en français
 
-### 2. MODE LIGHT — CORRECTIONS
-Le mode clair [data-theme="light"] existe en CSS mais :
-- Certains éléments gardent leur fond sombre
-- Les cartes, inputs, et textes ne sont pas correctement stylés en mode light
-- L'assistant IA 🤖 n'a pas de styles light mode (fond blanc, texte foncé, bordures adaptées)
+---
 
-### 3. ASSISTANT IA 🤖 — AMÉLIORATIONS
-- La vibration toutes les 10s doit fonctionner (actuellement l'animation CSS peut être écrasée par d'autres états)
-- Les questions prédéfinies doivent défiler horizontalement sur mobile
-- Le design doit ressembler à un vrai assistant (bulles de chat, etc.)
-- Les 10 réponses prédéfinies sont bonnes mais peuvent être enrichies
+## 🔴 PROBLÈMES PRIORITAIRES (ordre d'exécution)
 
-### 4. GÉNÉRAL
-- Vérifier que tous les éléments data-i18n s'affichent correctement
-- Vérifier que la bascule dark/light fonctionne sur TOUS les composants (footer, assistant, drawer, tools cards, hero card)
+### PRIORITÉ 1 — AUTOMATISATION NEWS
+1a. Stabiliser `fetch-news.mjs` : vérifier les flux RSS/Atom, le filtrage QA, la déduplication et le rejet explicite des sujets hors périmètre (crypto, travel, sport, finance grand public, lifestyle).
+1b. Créer ou corriger `.github/workflows/update-news.yml` avec :
+    - cron UTC (ex: `0 6 * * *`)
+    - `workflow_dispatch` pour déclenchement manuel
+    - logs lisibles par étape
+    - commit contrôlé (git add / commit / push) uniquement si des articles nouveaux existent
+    - échec explicite (`exit 1`) si aucun article exploitable n'est trouvé
+1c. Objectif à terme : sortir les données news de `index.html` vers `data/news.json` ou `data/news.mjs`, pour réduire le risque de corruption du fichier principal.
+
+### PRIORITÉ 2 — SECTION DAILY NEWS
+2a. Créer la section `Daily News` en haut de l'onglet News, AVANT le flux principal.
+2b. Règles de sélection : 3 à 5 contenus majeurs du jour, les plus récents et/ou les plus stratégiques pour le QA/software testing (une par catégorie si possible : AI Testing, QA News, Security Risk, Training, Thought Leadership).
+2c. Rendu distinct : titre `Daily News`, style visuel différencié (badge, bordure, card mise en avant), séparation visuelle nette avec le flux principal.
+2d. Le flux principal sous `Daily News` doit rester large, sans limitation artificielle, couvrant tout l'écosystème QA/software testing.
+2e. `Daily News` doit fonctionner en FR et EN (attributs `data-i18n` requis).
+
+### PRIORITÉ 3 — RESPONSIVE MOBILE
+3a. Burger menu : s'ouvre, affiche les 6 onglets, se referme correctement (tap outside / tap X / tap item).
+3b. Contenu onglets : aucun contenu tronqué ou qui dépasse sur mobile (Dashboard, Tools, ISTQB Prep, Labs, Training, News).
+3c. Chat IA : fenêtre `position:fixed, right:88px` trop large — adapter pour mobile (max-width: 100vw, right: 0 ou 8px, scrollable).
+3d. Avatar TJ dans la navbar : masqué sur mobile (`display:none` en dessous du breakpoint mobile).
+3e. Navbar overflow : `.nav-actions` ne doit pas déborder sur mobile.
+3f. Aucun scroll horizontal sur aucune vue (desktop ou mobile), aucun panel qui déborde.
+
+### PRIORITÉ 4 — MODE LIGHT COMPLET
+4a. Tous les composants doivent être correctement stylés sous `[data-theme="light"]` : fond blanc/clair, texte foncé, bordures adaptées.
+4b. Composants à vérifier explicitement : cartes news, Daily News cards, filtres, badges, dropdowns, assistant IA, ticker, boutons, panels, états vides.
+4c. Aucune régression de contraste, lisibilité, hover/focus ou overflow en mode light.
+
+### PRIORITÉ 5 — ASSISTANT IA 🤖
+5a. Animation de vibration toutes les 10s : s'assurer que l'état CSS n'est pas écrasé par d'autres classes d'état.
+5b. Questions prédéfinies : défilement horizontal sur mobile (overflow-x: auto, scroll snap).
+5c. Design bulles de chat : messages user/assistant différenciés (bulles, couleurs, alignement).
+5d. Tests : ouverture, fermeture (tap outside, bouton X), saisie, envoi, réponse, scroll interne du panel, coexistence avec thème/langue.
+
+### PRIORITÉ 6 — I18N ET THÈME TRANSVERSES
+6a. Vérifier que tous les éléments `data-i18n` s'affichent correctement après changement de langue (FR → EN et EN → FR).
+6b. Vérifier que la bascule dark/light fonctionne sur TOUS les composants : footer, assistant, drawer, tools cards, hero card, Daily News, ticker.
+6c. Aucun contenu mixte FR/EN visible après rerender, notamment dans les sections news, outils, labs, assistant, labels dynamiques, états UI.
+
+---
+
+## 🧪 TESTS À AJOUTER (`tests-bugs.mjs`)
+
+Les tests existants couvrent : chargement initial, dashboard, news, recherche, filtre source, tri, load more, tools, training, labs, ISTQB, navigation globale, thème, langue, mobile drawer, assistant, intégrité HTML.
+
+Ajouter les vérifications suivantes :
+
+**Chargement et navigation**
+- [ ] Chargement initial complet (toutes zones visibles, pas d'erreur console)
+- [ ] Navigation entre tous les onglets (News, Dashboard, Tools, Training, Labs, ISTQB)
+
+**Mobile**
+- [ ] Burger menu : ouverture, fermeture, tap item, tap outside
+- [ ] Overflow panels : absence de scroll horizontal sur tous les onglets
+- [ ] Desktop et mobile (viewport 390x844 pour mobile, 1280x800 pour desktop)
+
+**Thème**
+- [ ] Mode light complet : tous les composants lisibles (contraste, fond, texte)
+- [ ] Dark/light sur tous les composants (news cards, filtres, badges, dropdowns, assistant, ticker, boutons, panels, états vides, Daily News)
+
+**Assistant IA**
+- [ ] Ouverture et fermeture du panel
+- [ ] Saisie et envoi de message
+- [ ] Réponse reçue et affichée
+- [ ] Scroll interne du panel
+- [ ] Coexistence avec thème et langue (pas de blocage UI)
+
+**News**
+- [ ] Filtres et recherche news
+- [ ] Tri (date, catégorie)
+- [ ] Load more
+- [ ] Ticker (présence et défilement)
+
+**Daily News (nouveaux tests)**
+- [ ] Présence de la section `Daily News` AU-DESSUS du flux principal dans l'onglet News
+- [ ] 3 à 5 contenus prioritaires présents dans `Daily News`
+- [ ] Séparation nette entre `Daily News` et flux principal QA (séparateur visuel ou DOM distinct)
+- [ ] Cohérence FR/EN de `Daily News` (labels et contenus i18n corrects dans les deux langues)
+- [ ] Absence d'overflow horizontal après changement de thème ET changement de langue
+
+**I18N**
+- [ ] Bascule FR → EN et EN → FR sur desktop et mobile
+- [ ] Tous les éléments `data-i18n` mis à jour (aucun texte résiduel dans la langue précédente)
+
+**GitHub Pages**
+- [ ] Compatibilité GitHub Pages (pas de chemin absolu, assets relatifs)
+
+**Non-régression**
+- [ ] Run complet vert (0 test en échec) après chaque correctif
+
+---
 
 ## 🛠️ RESSOURCES
 
-### Code source complet (RAW) :
+### Code source (RAW) :
 https://raw.githubusercontent.com/AtmanTest/recette-qa-universe/main/index.html
 
-### Téléchargement direct (alternative) :
-Demande le fichier .zip à l'utilisateur
-
-### Structure du fichier :
+### Structure du fichier index.html :
 ```
 <html lang="fr" data-theme="dark">
   <head>
     <style>
       Sections CSS 1 à 49
-      - Sections 1-30: Layout général, navbar, grilles
-      - Section 30: [data-theme="light"] overrides
-      - Section 31: Scrollbar
+      - Sections 1-30 : Layout général, navbar, grilles
+      - Section 30    : [data-theme="light"] overrides
+      - Section 31    : Scrollbar
       - Sections 32-47: Composants (cards, hero, footer, badges, etc.)
-      - Section 48: AI Assistant CSS (ligne ~5635)
-      - Section 49: Mobile overrides (ligne ~5677)
+      - Section 48    : AI Assistant CSS (~ligne 5635)
+      - Section 49    : Mobile overrides (~ligne 5677)
     </style>
   </head>
   <body>
     <!-- NAVBAR (~ligne 5683) -->
     <!-- NEWS TICKER -->
-    <!-- TABS (News, Dashboard, Tools, Training, Labs, ISTQB Prep) -->
+    <!-- TABS : News, Dashboard, Tools, Training, Labs, ISTQB Prep -->
     <!-- FOOTER -->
     <!-- AI ASSISTANT HTML (~ligne 11530) -->
     <script>
-      try {
-        // Data (I18N keys, tools, courses, questions)
-        // Functions (switchTab, renderDash, renderTools, T(), RL(), etc.)
-        // Theme toggle, Lang toggle, Reader
-        // AI Assistant JS
-        // INITIALIZATION
-      } catch(e) { ... }
+      // Data (I18N keys, tools, courses, questions)
+      // const NEWS = [...] ← injecté par fetch-news.mjs
+      // Functions : switchTab, renderDash, renderTools, T(), RL(), etc.
+      // Theme toggle, Lang toggle, Reader
+      // AI Assistant JS
+      // INITIALIZATION
     </script>
   </body>
 </html>
 ```
 
-### Suite de tests :
-Le projet utilise Playwright pour les tests. 21 tests couvrent :
-- Chargement de la page
-- Filtre par source (news)
-- Bouton Reader
-- Traduction (I18N)
-- Menu hamburger
-- Theme toggle
+### Fichiers du repo :
+- `fetch-news.mjs`            : pipeline news RSS/Atom
+- `tests-bugs.mjs`            : suite Playwright régression
+- `.github/workflows/update-news.yml` : workflow GitHub Actions news
+- `BUSINESS_PLAN.md`          : cadrage produit
+- `docs/ARCHITECTURE_AUDIT.md`: (à créer) architecture détaillée
+- `docs/TEST_PLAN.md`         : (à créer si protocole séparé nécessaire)
 
-Pour exécuter : `npm install playwright` puis `node tests-bugs.mjs`
+---
 
-## 📤 COMMENT TRANSMETTRE TES CORRECTIONS
+## 📤 COMMENT TRANSMETTRE LES CORRECTIONS
 
-### Option A — Push direct sur GitHub (recommandé)
-Tu as un accès GitHub par token. Procédure :
-
+### Option A — Push sur branche recette (recommandé)
 ```bash
-# 1. Cloner le dépôt recette
-git clone https://[TON_TOKEN_GITHUB]@github.com/AtmanTest/recette-qa-universe.git
+git clone https://[TOKEN]@github.com/AtmanTest/recette-qa-universe.git
 cd recette-qa-universe
-
-# 2. Créer une branche pour tes corrections
 git checkout -b fix/nom-de-la-correction
-
-# 3. Faire tes modifications sur index.html
-# (éditer le fichier)
-
-# 4. Tester
+# modifier les fichiers
 node tests-bugs.mjs
-
-# 5. Commit et push
-git add index.html
+git add .
 git commit -m "fix: description de la correction"
 git push origin fix/nom-de-la-correction
 ```
-
-⚠️ **NE JAMAIS push sur main directement.** Toujours créer une branche.
+⚠️ Ne jamais push sur `main` directement.
 
 ### Option B — Fichier complet
-Après tes modifications, renvoie le fichier **index.html** complet à l'utilisateur.
+Renvoyer `index.html` complet (ou le fichier modifié).
 
 ### Option C — Patch diff
 ```diff
@@ -130,23 +196,37 @@ Après tes modifications, renvoie le fichier **index.html** complet à l'utilisa
 ```
 
 ### Option D — Instructions de patch (en dernier recours)
-Décris précisément chaque modification.
+Décrire précisément chaque modification à appliquer.
+
+---
 
 ## ✅ CRITÈRES DE SUCCÈS
-1. Le burger menu s'ouvre et affiche les 6 onglets sur mobile
-2. Tous les onglets s'affichent correctement (pas de contenu tronqué)
-3. Le chat IA est utilisable sur mobile (taille adaptée, scrollable)
-4. Le mode light fonctionne parfaitement (tous les composants)
-5. Les 21 tests Playwright passent
-6. TJ est caché sur mobile
-7. L'assistant IA vibre toutes les 10s
 
-## ⚠️ RÈGLES IMPORTANTES
-- Ne JAMAIS supprimer ou casser les fonctions existantes (T(), RL(), switchTab(), renderDash(), renderTools(), renderTraining(), renderLabs(), renderISTQB(), init(), toggleMobileNav(), toggleCreatorDropdown(), toggleAI(), sendAI())
-- Ne JAMAIS modifier les clés I18N ou les données bilingues
-- Le fichier doit rester UN SEUL fichier HTML (tout inline)
-- Teste avec un viewport mobile (390x844) pour le responsive
-- L'utilisateur communique en français, parle-lui en français si nécessaire
-- Si un problème est trop complexe ou nécessite une décision, explique-le à l'utilisateur en français
+1. Workflow `update-news.yml` fonctionne : cron UTC + workflow_dispatch, commit contrôlé, échec explicite si 0 article
+2. Section `Daily News` présente au-dessus du flux principal, 3-5 contenus prioritaires, rendu distinct, i18n FR/EN
+3. Flux principal QA inchangé (large, non limité)
+4. Burger menu fonctionnel sur mobile (ouverture, fermeture, 6 onglets)
+5. Aucun contenu tronqué ou en overflow sur mobile (tous onglets)
+6. Chat IA utilisable sur mobile (taille adaptée, scrollable)
+7. Mode light parfait sur TOUS les composants (y compris Daily News)
+8. Avatar TJ masqué sur mobile
+9. Assistant IA vibre toutes les 10s, questions défilent sur mobile, bulles de chat correctes
+10. I18N cohérent FR/EN sur desktop et mobile (aucun résidu de l'ancienne langue)
+11. Tous les tests Playwright passent (run complet vert)
+12. Nouveaux tests Daily News, responsive, overflow, i18n et non-régression ajoutés et verts
+
+---
+
+## ⚠️ RÈGLES ABSOLUES
+
+- Ne JAMAIS supprimer ni casser les fonctions existantes :
+  `T()`, `RL()`, `switchTab()`, `renderDash()`, `renderTools()`, `renderTraining()`,
+  `renderLabs()`, `renderISTQB()`, `init()`, `toggleMobileNav()`,
+  `toggleCreatorDropdown()`, `toggleAI()`, `sendAI()`
+- Ne JAMAIS modifier les clés I18N ni les données bilingues
+- Le fichier doit rester UN SEUL fichier HTML (tout inline) sauf si une migration explicite vers `data/news.json` est décidée
+- Tester systématiquement en viewport mobile (390x844) ET desktop (1280x800)
+- Communiquer en français avec l'utilisateur
+- Si un problème est trop complexe ou nécessite une décision, l'expliquer en français avant d'agir
 
 ═══════════════════════════════════════════════════════════════
